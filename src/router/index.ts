@@ -10,7 +10,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: HomePage,
-    meta: { requiresAuth: true }, // 인증이 필요한 라우트
+    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
   },
   {
     path: '/auth',

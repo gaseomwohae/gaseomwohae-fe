@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Drawer from '@/domain/common/components/drawer/Drawer.vue';
+</script>
 
 <template>
-  <h1>Home</h1>
+  <Drawer />
+  <router-view />
 </template>
+
