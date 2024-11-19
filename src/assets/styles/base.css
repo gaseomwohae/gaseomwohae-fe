@@ -1,0 +1,71 @@
+/* 폰트 설정 */
+@font-face {
+  font-family: 'CookieRun';
+  src: url('../fonts/CookieRunFont_OTF/CookieRun Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CookieRun';
+  src: url('../fonts/CookieRunFont_OTF/CookieRun Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CookieRun';
+  src: url('../fonts/CookieRunFont_OTF/CookieRun Black.otf') format('opentype');
+  font-weight: black;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('../fonts/nanum-gothic/NanumGothic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('../fonts/nanum-gothic/NanumGothicBold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('../fonts/nanum-gothic/NanumGothicExtraBold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
+  src: url('../fonts/nanum-gothic/NanumGothicLight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+/* 기본 설정 초기화 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'NanumGothic', sans-serif;
+  font-weight: normal;
+  background-color: #faf9ff;
+  padding: 30px;
+}
+
+input {
+  font-family: 'NanumGothic', sans-serif;
+}
