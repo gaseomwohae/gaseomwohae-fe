@@ -1,4 +1,8 @@
 <script setup>
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
 
   const props = defineProps({
     text: {
@@ -9,12 +13,20 @@
       type: String,
       required: true,
     },
+    routeName: {
+      type: String,
+      required: true,
+    },
   });
   const emit = defineEmits(['click']);
+
+  const isCurrentRoute = computed(() => {
+    return route.name === props.routeName;
+  });
 </script>
 
 <template>
-  <button class="drawer-button" @click="emit('click')">
+  <button class="drawer-button" :class="{ 'active': isCurrentRoute }" @click="emit('click')">
     <img :src="`src/assets/icons/${props.src}.png`" :alt="`${props.icon}`" />
     <span>{{ props.text }}</span>
   </button>
@@ -51,6 +63,10 @@
   .drawer-button:hover {
     background-color: #FAF9FF;
   }
+
+  .drawer-button.active {
+  background-color: #FAF9FF;
+}
 
   img {
     width: 20px;

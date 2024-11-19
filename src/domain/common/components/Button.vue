@@ -16,6 +16,14 @@
       type: String,
       default: '#fff',
     },
+    fontSize: {
+      type: String,
+      default: '16px',
+    },
+    height: {
+      type: String,
+      default: '50px',
+    },
   });
 
   const emit = defineEmits(['click']);
@@ -35,7 +43,9 @@
     font-size: 16px;
     font-family: 'NanumGothic';
     font-weight: bold;
+    font-size: v-bind(fontSize);
     cursor: pointer;
+    height: v-bind(height);
     border: none;
   }
 </style>
