@@ -2,25 +2,24 @@
   <button @click="onClick">{{ value }}</button>
 </template>
 
-<script setup>
-  defineProps({
-    value: {
-      type: String,
-      default: 'button',
-    },
-    backgroundColor: {
-      type: String,
-      default: '#346aff',
-    },
-    fontColor: {
-      type: String,
-      default: '#fff',
-    },
+<script setup lang="ts">
+  interface ButtonProps {
+    value?: string;
+    backgroundColor?: string;
+    fontColor?: string;
+  }
+
+  const props = withDefaults(defineProps<ButtonProps>(), {
+    value: 'button',
+    backgroundColor: '#346aff',
+    fontColor: '#fff',
   });
 
-  const emit = defineEmits(['click']);
+  const emit = defineEmits<{
+    (e: 'click'): void;
+  }>();
 
-  const onClick = () => {
+  const onClick = (): void => {
     emit('click');
   };
 </script>

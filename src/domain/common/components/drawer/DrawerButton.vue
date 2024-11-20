@@ -1,5 +1,4 @@
 <script setup>
-
   const props = defineProps({
     text: {
       type: String,
@@ -18,7 +17,7 @@
     <img :src="`src/assets/icons/${props.src}.png`" :alt="`${props.icon}`" />
     <span>{{ props.text }}</span>
   </button>
-</template> 
+</template>
 
 <style scoped>
   .drawer-button {
@@ -42,14 +41,13 @@
     opacity: 0.1;
   }
 
-
   .drawer-button img,
   .drawer-button span {
     opacity: 1;
   }
-  
+
   .drawer-button:hover {
-    background-color: #FAF9FF;
+    background-color: #faf9ff;
   }
 
   img {

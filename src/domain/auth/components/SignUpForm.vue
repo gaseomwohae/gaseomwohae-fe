@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import InputField from './InputField.vue';
-
-  import Button from '@/domain/common/components/Button.vue';
   import Logo from '@/domain/common/components/Logo.vue';
+  import { ref } from 'vue';
+  import Button from '../../common/components/Button.vue';
   import type { SignUpRequest } from '../model/auth.type';
-  import authService from '../service/AuthService';
+  import { authService } from '../service/AuthService';
+  import InputField from './InputField.vue';
 
   const signUpForm = ref<SignUpRequest>({ email: '', name: '', password: '', passwordConfirm: '' });
 

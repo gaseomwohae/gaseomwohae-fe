@@ -23,12 +23,10 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-
-  import authService from '../service/AuthService';
-
   import Button from '@/domain/common/components/Button.vue';
+  import { ref } from 'vue';
   import type { LoginRequest } from '../model/auth.type';
+  import { authService } from '../service/AuthService';
   import AuthHeader from './AuthHeader.vue';
   import InputField from './InputField.vue';
 
