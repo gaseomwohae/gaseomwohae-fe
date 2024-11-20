@@ -27,7 +27,7 @@
 
 <template>
   <button class="drawer-button" :class="{ active: isCurrentRoute }" @click="emit('click')">
-    <img :src="`src/assets/icons/${props.src}.png`" :alt="`${props.icon}`" />
+    <img :src="`src/assets/icons/${props.src}.png`" :alt="`${props.src}`" />
     <span>{{ props.text }}</span>
   </button>
 </template>
