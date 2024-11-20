@@ -1,8 +1,8 @@
-<script setup>
-import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+<script setup lang="ts">
+  import { computed } from 'vue';
+  import { useRoute } from 'vue-router';
 
-const route = useRoute();
+  const route = useRoute();
 
   const props = defineProps({
     text: {
@@ -19,18 +19,18 @@ const route = useRoute();
     },
   });
   const emit = defineEmits(['click']);
-
+  console.log(props.src);
   const isCurrentRoute = computed(() => {
     return route.name === props.routeName;
   });
 </script>
 
 <template>
-  <button class="drawer-button" :class="{ 'active': isCurrentRoute }" @click="emit('click')">
-    <img :src="`src/assets/icons/${props.src}.png`" :alt="`${props.icon}`" />
+  <button class="drawer-button" :class="{ active: isCurrentRoute }" @click="emit('click')">
+    <img :src="`/src/assets/icons/${props.src}.png`" :alt="`${props.src}`" />
     <span>{{ props.text }}</span>
   </button>
-</template> 
+</template>
 
 <style scoped>
   .drawer-button {
@@ -54,19 +54,18 @@ const route = useRoute();
     opacity: 0.1;
   }
 
-
   .drawer-button img,
   .drawer-button span {
     opacity: 1;
   }
-  
+
   .drawer-button:hover {
-    background-color: #FAF9FF;
+    background-color: #faf9ff;
   }
 
   .drawer-button.active {
-  background-color: #FAF9FF;
-}
+    background-color: #faf9ff;
+  }
 
   img {
     width: 20px;

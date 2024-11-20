@@ -3,33 +3,43 @@ import SignUpForm from '@/domain/auth/components/SignUpForm.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import AuthPage from '../views/AuthPage.vue';
-import HomePage from '../views/HomPage.vue';
-
+import DashBoardPage from '../views/DashBoardPage.vue';
+import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomePage,
+    component: DashBoardPage,
     // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+    children: [
+      {
+        path: 'travel/:id',
+        name: 'Travel',
+        component: HomeDashBoard,
+        children: [
+          {
+            path: 'schedule',
+            name: 'Schedule',
+            component: HomeDashBoard,
+            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+          },
+          {
+            path: 'supplies',
+            name: 'TravelSupplies',
+            component: HomeDashBoard,
+            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+          },
+          {
+            path: 'participants',
+            name: 'Participants',
+            component: HomeDashBoard,
+            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+          },
+        ],
+      },
+    ],
   },
-  {
-    path: '/schedule',
-    name: 'Schedule',
-    component: HomePage,
-    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-  },
-  {
-    path: '/travel_supplies',
-    name: 'TravelSupplies',
-    component: HomePage,
-    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-  },
-  {
-    path: '/participants',
-    name: 'Participants',
-    component: HomePage,
-    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-  },
+ 
   {
     path: '/auth',
     name: 'Auth',

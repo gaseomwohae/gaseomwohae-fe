@@ -1,22 +1,18 @@
-
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <template>
-    div
-    <button class="profile-button-layout profile-button profile-font " @click="toggleDropdown">
-        <div class="profile-layout">
-            <img src="/src/assets/icons/profile.png" alt="profile" class="profile-layout" > 
-            <div class="profile-badge">
-            </div>
-        </div>
-        <span>프로필</span>
+  <button class="profile-button-layout profile-button profile-font" @click="toggleDropdown">
+    <div class="profile-layout">
+      <img src="/src/assets/icons/profile.png" alt="profile" class="profile-layout" />
+      <div class="profile-badge"></div>
+    </div>
+    <span>프로필</span>
   </button>
 </template>
 
 <style scoped>
   .profile-button-layout {
-    margin-top:auto;
+    margin-top: auto;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -35,24 +31,24 @@
   }
 
   .profile-button:hover {
-    background-color: #FAF9FF;
+    background-color: #faf9ff;
   }
 
-  .profile-font{
+  .profile-font {
     font-size: 16px;
     font-weight: 400;
   }
-  
-  img{
+
+  img {
     height: 35px;
     width: 35px;
   }
 
-  .profile-layout{
+  .profile-layout {
     position: relative;
   }
 
-  .profile-badge{
+  .profile-badge {
     display: inline-block; /* todo 초대 알림이 올 시 display 변경 */
     position: absolute;
     right: 0px;
@@ -60,7 +56,6 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: #3A6FF9;
+    background-color: #3a6ff9;
   }
-
-</style>    
+</style>

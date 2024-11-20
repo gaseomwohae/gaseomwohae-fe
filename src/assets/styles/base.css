@@ -64,6 +64,8 @@ body {
   font-weight: normal;
   background-color: #faf9ff;
   padding: 30px;
+  height: 100vh;
+  line-height: 1;
 }
 
 input {
