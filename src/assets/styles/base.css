@@ -1,18 +1,8 @@
+html {
+  font-size: 14px;
+}
+
 /* 폰트 설정 */
-@font-face {
-  font-family: 'CookieRun';
-  src: url('../fonts/CookieRunFont_OTF/CookieRun Regular.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'CookieRun';
-  src: url('../fonts/CookieRunFont_OTF/CookieRun Bold.otf') format('opentype');
-  font-weight: bold;
-  font-style: normal;
-}
-
 @font-face {
   font-family: 'CookieRun';
   src: url('../fonts/CookieRunFont_OTF/CookieRun Black.otf') format('opentype');
@@ -22,30 +12,29 @@
 
 @font-face {
   font-family: 'NanumGothic';
+  src: url('../fonts/nanum-gothic/NanumGothicLight.otf') format('opentype');
+  font-weight: 300; /* Light 글꼴 */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NanumGothic';
   src: url('../fonts/nanum-gothic/NanumGothic.otf') format('opentype');
-  font-weight: normal;
+  font-weight: 400; /* Regular (normal) 글꼴 */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'NanumGothic';
   src: url('../fonts/nanum-gothic/NanumGothicBold.otf') format('opentype');
-  font-weight: bold;
+  font-weight: 700; /* Bold 글꼴 */
   font-style: normal;
-  margin: 0;
 }
 
 @font-face {
   font-family: 'NanumGothic';
   src: url('../fonts/nanum-gothic/NanumGothicExtraBold.otf') format('opentype');
-  font-weight: 800;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'NanumGothic';
-  src: url('../fonts/nanum-gothic/NanumGothicLight.otf') format('opentype');
-  font-weight: 300;
+  font-weight: 800; /* Extra-Bold 글꼴 */
   font-style: normal;
 }
 
@@ -61,11 +50,72 @@
 
 body {
   font-family: 'NanumGothic', sans-serif;
-  font-weight: normal;
+  font-weight: 400;
   background-color: #faf9ff;
   padding: 30px;
 }
 
 input {
   font-family: 'NanumGothic', sans-serif;
+}
+
+.font-xs {
+  font-size: 0.75rem;
+}
+
+.font-s {
+  font-size: 0.875rem;
+}
+
+.font-m {
+  font-size: 1rem;
+}
+
+.font-l {
+  font-size: 1.125rem;
+}
+
+.font-xl {
+  font-size: 1.25rem;
+}
+
+.font-2xl {
+  font-size: 1.5rem;
+}
+
+.font-3xl {
+  font-size: 1.75rem;
+}
+
+.font-4xl {
+  font-size: 2rem;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.font-extra-bold {
+  font-weight: extra-bold;
+}
+
+.font-light {
+  font-weight: 300;
+}
+
+.font-regular {
+  font-weight: 400;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-extra-bold {
+  font-weight: 800;
+}
+
+.font-caption {
+  font-size: 0.75rem;
+  color: #868e96;
 }
