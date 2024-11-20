@@ -2,15 +2,15 @@ import axiosInstance from '@/domain/common/util/axios';
 import type { LoginRequest, SignUpRequest } from '../model/auth.type';
 
 class AuthService {
-  async signUp(signUpRequest: SignUpRequest) {
+  async signUp(signUpRequest: SignUpRequest): Promise<void> {
     const response = await axiosInstance.post('/api/auth/signup', signUpRequest);
-    return response.data;
+    return response;
   }
 
-  async login(loginRequest: LoginRequest) {
+  async login(loginRequest: LoginRequest): Promise<void> {
     const response = await axiosInstance.post('/api/auth/login', loginRequest);
-    return response.data;
+    return response;
   }
 }
 
-export default new AuthService();
+export const authService = new AuthService();

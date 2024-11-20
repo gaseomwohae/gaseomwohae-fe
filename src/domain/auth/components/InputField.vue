@@ -1,5 +1,5 @@
-<script setup>
-  import { ref, watch } from 'vue';
+<script setup lang="ts">
+  import { ref } from 'vue';
 
   const props = defineProps({
     type: {
@@ -29,8 +29,6 @@
 
   const inputValue = ref(props.modelValue);
 
-  watch();
-
   const emit = defineEmits(['update:modelValue']);
 </script>
 
@@ -43,7 +41,7 @@
       :placeholder="placeholder"
       v-model="inputValue"
       :required="required"
-      @input="emit('update:modelValue', $event.target.value)"
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
   </div>
 </template>

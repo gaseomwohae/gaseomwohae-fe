@@ -19,16 +19,16 @@
     />
     <Button value="로그인" />
   </form>
-  <Button value="회원가입" backgroundColor="#FAF9FF" fontColor="#000000" @click="loginHandler" />
+  <RouterLink to="/auth/signup">
+    <Button value="회원가입" backgroundColor="#FAF9FF" fontColor="#000000" height="50px" />
+  </RouterLink>
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-
-  import authService from '../service/AuthService';
-
   import Button from '@/domain/common/components/Button.vue';
+  import { ref } from 'vue';
   import type { LoginRequest } from '../model/auth.type';
+  import { authService } from '../service/AuthService';
   import AuthHeader from './AuthHeader.vue';
   import InputField from './InputField.vue';
 
