@@ -19,7 +19,9 @@
     />
     <Button value="로그인" />
   </form>
-  <Button value="회원가입" backgroundColor="#FAF9FF" fontColor="#000000" @click="loginHandler" />
+  <RouterLink to="/auth/signup">
+    <Button value="회원가입" backgroundColor="#FAF9FF" fontColor="#000000" height="50px" />
+  </RouterLink>
 </template>
 
 <script setup lang="ts">

@@ -7,12 +7,16 @@
     value?: string;
     backgroundColor?: string;
     fontColor?: string;
+    fontSize?: string;
+    height?: string;
   }
 
   const props = withDefaults(defineProps<ButtonProps>(), {
     value: 'button',
     backgroundColor: '#346aff',
     fontColor: '#fff',
+    fontSize: '16px',
+    height: '50px',
   });
 
   const emit = defineEmits<{
