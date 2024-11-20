@@ -13,6 +13,24 @@ const routes = [
     // meta: { requiresAuth: true }, // 인증이 필요한 라우트
   },
   {
+    path: '/schedule',
+    name: 'Schedule',
+    component: HomePage,
+    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+  },
+  {
+    path: '/travel_supplies',
+    name: 'TravelSupplies',
+    component: HomePage,
+    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+  },
+  {
+    path: '/participants',
+    name: 'Participants',
+    component: HomePage,
+    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+  },
+  {
     path: '/auth',
     name: 'Auth',
     component: AuthPage,
