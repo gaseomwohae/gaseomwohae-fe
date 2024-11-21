@@ -5,6 +5,7 @@ import { useAuthStore } from '../stores/auth';
 import AuthPage from '../views/AuthPage.vue';
 import DashBoardPage from '../views/DashBoardPage.vue';
 import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
+import SideBar from "@/domain/schedule/components/SideBar.vue";
 const routes = [
   {
     path: '/',
@@ -16,26 +17,25 @@ const routes = [
         path: 'travel/:id',
         name: 'Travel',
         component: HomeDashBoard,
-        children: [
-          {
-            path: 'schedule',
-            name: 'Schedule',
-            component: HomeDashBoard,
-            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-          },
-          {
-            path: 'supplies',
-            name: 'TravelSupplies',
-            component: HomeDashBoard,
-            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-          },
-          {
-            path: 'participants',
-            name: 'Participants',
-            component: HomeDashBoard,
-            // meta: { requiresAuth: true }, // 인증이 필요한 라우트
-          },
-        ],
+
+      },
+      {
+        path: 'travel/:id/schedule',
+        name: 'Schedule',
+        component: SideBar,
+        // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+      },
+      {
+        path: 'travel/:id/supplies',
+        name: 'TravelSupplies',
+        component: HomeDashBoard,
+        // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+      },
+      {
+        path: 'travel/:id/participants',
+        name: 'Participants',
+        component: HomeDashBoard,
+        // meta: { requiresAuth: true }, // 인증이 필요한 라우트
       },
     ],
   },

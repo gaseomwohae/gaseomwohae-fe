@@ -16,5 +16,6 @@
     flex-direction: row;
     gap: 20px;
     background-color: #f5f5f5;
+    height: 100%;
   }
 </style>

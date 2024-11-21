@@ -1,11 +1,8 @@
-<script setup lang="ts">
-  import SideBar from './domain/schedule/components/SideBar.vue';
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <main>
     <RouterView></RouterView>
-    <SideBar />
   </main>
 </template>
 

@@ -102,11 +102,11 @@
     padding: 1.5rem;
     border-radius: 1.5rem;
     border: 1px solid #e0e0e0;
+    overflow: auto;
   }
 
   .store-review__store-section {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -119,7 +119,6 @@
 
   .store-review__review-section {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
