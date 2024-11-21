@@ -6,6 +6,7 @@ import AuthPage from '../views/AuthPage.vue';
 import DashBoardPage from '../views/DashBoardPage.vue';
 import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
 import SideBar from "@/domain/schedule/components/SideBar.vue";
+import ParticipationDashBoard from "@/domain/participation/components/ParticipationDashBoard.vue";
 const routes = [
   {
     path: '/',
@@ -34,7 +35,7 @@ const routes = [
       {
         path: 'travel/:id/participants',
         name: 'Participants',
-        component: HomeDashBoard,
+        component: ParticipationDashBoard,
         // meta: { requiresAuth: true }, // 인증이 필요한 라우트
       },
     ],

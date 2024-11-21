@@ -5,6 +5,7 @@
     <link rel="icon" href="/favicon.ico" />
     <!-- TODO: favicon 변경하기 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="module" src="/acquisitions.js"></script>
 
     <title>가서뭐해?</title>
   </head>
@@ -13,3 +14,30 @@
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [
+        {
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1,
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+</script>

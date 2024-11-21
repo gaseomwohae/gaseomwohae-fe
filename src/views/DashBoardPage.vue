@@ -6,7 +6,7 @@
 <template>
   <div class="dashboard-layout">
     <Drawer />
-    <div class="dashboard-content-layout" style="height: 100%">
+    <div class="dashboard-content-layout" style="height: 100%; width: 100%">
       <Header />
       <div class="dashboard-content-layout-inner">
         <router-view />
@@ -19,6 +19,8 @@
   .dashboard-layout {
     display: flex;
     flex-direction: row;
+    width: fit-content;
+    width: 100%;
     gap: 40px;
     height: calc(100vh - 60px);
   }
