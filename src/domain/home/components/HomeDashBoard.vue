@@ -6,6 +6,30 @@
   import CheckList from './check_list/CheckList.vue';
   import SimpleMap from './SimpleMap.vue';
   import { ref } from 'vue';
+  import Chart from './Chart.vue';
+  import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
+
+  const lottieAnimation = ref<any>(null);
+
+  import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    BarElement,
+    CategoryScale,
+    LinearScale,
+  } from 'chart.js';
+
+  ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+
+  const chartData = {
+    labels: ['January', 'February', 'March'],
+    datasets: [{ data: [40, 20, 12] }],
+  };
+  const chartOptions = {
+    responsive: true,
+  };
 
   const locationWeather: LocationWeather = {
     location: '서울',
@@ -46,11 +70,20 @@
       dates: { start: new Date(2024, 11, 15), end: new Date(2024, 11, 19) },
     },
   ]);
+
+  const showAnimation = () => {
+    lottieAnimation.value.showAnimation();
+  };
 </script>
 
 <template>
   <div class="dashboard-side-layout">
-    <div class="dashboard-layout">
+    <div id="app">
+      <button @click="showAnimation">Show Lottie</button>
+      <AcceptLottie ref="lottieAnimation" title="초대가 완료되었습니다." />
+    </div>
+
+    <div class="dashboard-left-layout">
       <div class="dashboard-short-info-card-layout">
         <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
         <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
@@ -63,9 +96,9 @@
           <WeatherCard :locationWeather="locationWeather" />
           <CheckList />
         </div>
-        <div class="dashboard-layout">
+        <div class="dashboard-right-layout">
+          <Chart />
           <SimpleMap />
-          <div class="dashboard-info-column-layout"></div>
         </div>
       </div>
     </div>
@@ -76,18 +109,10 @@
 </template>
 
 <style scoped>
-  .vc-title-wrapper {
-    background-color: transparent !important; /* 배경색 제거 */
-    padding: 0 !important; /* 패딩 제거 또는 조정 */
-    /* 추가 스타일 */
-    border: none !important; /* 테두리 제거 */
-    box-shadow: none !important; /* 그림자 제거 */
-  }
-
   .dashboard-side-layout {
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    justify-content: space-between;
     height: 100%;
   }
 
@@ -96,12 +121,22 @@
     flex-direction: row;
     gap: 20px;
   }
-  .dashboard-layout {
+  .dashboard-left-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 20px;
+
+    margin: 0 auto;
+  }
+
+  .dashboard-right-layout {
     display: flex;
     flex-direction: column;
     height: 100%;
     gap: 20px;
   }
+
   .dashboard-info-card-layout {
     display: flex;
     flex-direction: row;

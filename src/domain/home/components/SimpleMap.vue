@@ -30,7 +30,7 @@
 </script>
 
 <template>
-  <div id="mapContainer" style="width: 520px; height: 437px; border-radius: 20px"></div>
+  <div id="mapContainer" style="width: 520px; height: 580px; border-radius: 20px"></div>
 </template>
 
 <style scoped>
