@@ -43,14 +43,14 @@
   }
 
   img {
-    width: 6rem;
-    height: 6rem;
+    width: 5rem;
+    height: 5rem;
     border-radius: 1.5rem;
   }
 
   .store-card__info {
     width: 100%;
-    height: 6rem;
+    height: 5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
