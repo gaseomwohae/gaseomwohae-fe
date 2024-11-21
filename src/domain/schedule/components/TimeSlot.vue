@@ -20,5 +20,6 @@
     height: 6rem;
     background-color: #faf9ff;
     border-bottom: dashed 0.00625rem #00000020;
+    user-select: none;
   }
 </style>
