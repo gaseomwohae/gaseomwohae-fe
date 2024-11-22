@@ -1,11 +1,15 @@
 <!-- src/domain/participation/components/ParticipationProfile.vue -->
 <script setup lang="ts">
-  import { ref, defineEmits, defineProps } from 'vue';
-
+  import { ref, defineEmits, defineProps, type PropType } from 'vue';
+  import type { Participant } from '@/domain/common/model/Participant.type';
   const emit = defineEmits(['select']);
+
   const props = defineProps({
     clickable: Boolean,
+    participant: Object as PropType<Participant>,
   });
+
+  console.log(props.participant);
 
   const isSelected = ref(false);
 
@@ -23,7 +27,7 @@
       src="/src/assets/icons/profile.png"
       :class="{ selected: isSelected, clickable: clickable }"
     />
-    <div class="participation-profile-name">이름</div>
+    <div class="participation-profile-name">{{ props.participant?.name }}</div>
   </div>
 </template>
 

@@ -74,10 +74,10 @@
   <div class="dashboard-side-layout">
     <div class="dashboard-left-layout">
       <div class="dashboard-short-info-card-layout">
-        <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
-        <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
-        <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
-        <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
+        <InfoCard title="기간" content="3일" subContent="총 참여자 수" />
+        <InfoCard title="참여자" content="100명" subContent="총 참여자 수" />
+        <InfoCard title="목적지" content="광역시" subContent="총 참여자 수" />
+        <InfoCard title="예산" content="20000원" subContent="총 참여자 수" />
       </div>
       <div class="dashboard-info-card-layout">
         <Accommodation />
