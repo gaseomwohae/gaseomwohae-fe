@@ -2,12 +2,14 @@
   <div class="side-bar">
     <StoreSearch />
     <StoreReview />
+    <TimeTable />
   </div>
 </template>
 
 <script setup lang="ts">
   import StoreReview from './StoreReview.vue';
   import StoreSearch from './StoreSearch.vue';
+  import TimeTable from './TimeTable.vue';
 </script>
 
 <style scoped>

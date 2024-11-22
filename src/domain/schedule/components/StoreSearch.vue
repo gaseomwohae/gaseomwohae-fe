@@ -12,7 +12,7 @@
 
 <style scoped>
   .store-search {
-    width: 28rem;
+    width: 25rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
