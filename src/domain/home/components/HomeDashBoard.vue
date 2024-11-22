@@ -9,8 +9,6 @@
   import Chart from './Chart.vue';
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
 
-  const lottieAnimation = ref<any>(null);
-
   import {
     Chart as ChartJS,
     Title,
@@ -70,19 +68,10 @@
       dates: { start: new Date(2024, 11, 15), end: new Date(2024, 11, 19) },
     },
   ]);
-
-  const showAnimation = () => {
-    lottieAnimation.value.showAnimation();
-  };
 </script>
 
 <template>
   <div class="dashboard-side-layout">
-    <div id="app">
-      <button @click="showAnimation">Show Lottie</button>
-      <AcceptLottie ref="lottieAnimation" title="초대가 완료되었습니다." />
-    </div>
-
     <div class="dashboard-left-layout">
       <div class="dashboard-short-info-card-layout">
         <InfoCard title="참여자 수" content="100명" subContent="총 참여자 수" />
