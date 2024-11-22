@@ -17,7 +17,7 @@
     align-items: center;
     padding: 0.5rem;
     width: 100%;
-    height: 6rem;
+    height: 8rem;
     background-color: #faf9ff;
     border-bottom: dashed 0.00625rem #00000020;
     user-select: none;

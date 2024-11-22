@@ -7,17 +7,22 @@
     @dragend="handleDragEnd"
   >
     <div class="resize-handle top" @mousedown.stop.prevent="startResize('top')"></div>
-    <div class="schedule-content"></div>
+    <div class="schedule-content">
+      <div class="store">
+        <StoreSummary :store="store" />
+      </div>
+    </div>
     <div class="resize-handle bottom" @mousedown.stop.prevent="startResize('bottom')"></div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
+  import type { Store } from '../model/store.type';
   import { minutesToTime, timeToMinutes } from '../utils/timeUtils';
-
+  import StoreSummary from './StoreSummary.vue';
   const MINUTES_PER_SLOT = 30;
-  const SLOT_HEIGHT = 6; // px (6rem)
+  const SLOT_HEIGHT = 8; // px (6rem)
   const MIN_DURATION = MINUTES_PER_SLOT; // 최소 30분
   const MAX_DURATION = 24 * 60; // 최대 24시간
 
@@ -25,6 +30,7 @@
     id: number;
     startTime: string;
     endTime: string;
+    store: Store;
   }>();
 
   const emit = defineEmits([
@@ -139,8 +145,8 @@
     const height = endPosition - startPosition;
 
     return {
-      top: `${startPosition + 1}rem`,
-      height: `${height - 2}rem`,
+      top: `${startPosition + 0.5}rem`,
+      height: `${height - 1.1}rem`,
     };
   });
 
@@ -161,6 +167,10 @@
     position: absolute;
     margin: 0 1rem;
     width: calc(100% - 4.3rem);
+  }
+
+  .schedule-block:hover {
+    border: 1px solid #00000020;
   }
 
   /* 실제 드래그 영역 */
@@ -207,5 +217,11 @@
   /* 리사이징 중일 때는 드래그 비활성화 */
   .schedule-block[data-resizing='true'] {
     cursor: row-resize;
+  }
+
+  .store {
+    background-color: #fff;
+    border-radius: 1.5rem;
+    padding: 1rem;
   }
 </style>

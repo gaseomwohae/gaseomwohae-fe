@@ -1,5 +1,5 @@
 <template>
-  <div class="store-card">
+  <div class="store-card" @click="selectStore">
     <img :src="storeData.img" alt="store" />
     <div class="store-card__info">
       <div class="store-card__header">
@@ -27,6 +27,12 @@
     reviewRate: 4.5,
     description: '맛있는 햄버거 맛집',
   });
+
+  const emits = defineEmits(['selectStore']);
+
+  function selectStore() {
+    emits('selectStore', storeData.id);
+  }
 </script>
 
 <style scoped>
@@ -37,9 +43,7 @@
     align-items: center;
     flex-direction: row;
     gap: 1.5rem;
-    background-color: #fff;
-    border-radius: 1.5rem;
-    padding: 1rem;
+    background-color: transparent;
   }
 
   img {

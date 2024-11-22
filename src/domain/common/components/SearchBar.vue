@@ -23,23 +23,26 @@
 
 <style scoped>
   .search-bar {
+    position: sticky;
     position: relative;
     width: 100%;
   }
 
   .search-input {
     width: 100%;
-    height: fit-content;
-    border: solid 0.125rem #3a6ff9;
-    border-radius: 1rem;
+    height: 4rem;
+    border: solid 0.25rem #3a6ff9;
+    border-radius: 1.5rem;
     padding: 1rem;
+    font-size: 1rem;
+    background-color: #ffffff;
   }
 
   .search-icon {
     position: absolute;
     right: 1rem;
-    top: 35%;
-    width: 1rem;
-    height: 1rem;
+    top: 30%;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 </style>

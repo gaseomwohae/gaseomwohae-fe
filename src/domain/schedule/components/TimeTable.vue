@@ -1,6 +1,6 @@
 <template>
   <div class="schedule-container">
-    <div class="time-table__header">2024년 11월 21일</div>
+    <div class="time-table__header font-xl font-extra-bold">2024년 11월 21일</div>
     <div class="time-table">
       <div class="time-table__body" @dragover="handleDragOver" @drop="handleDrop">
         <div v-for="time in times" :key="time" class="time-slot">
@@ -11,6 +11,7 @@
             v-for="schedule in schedules"
             :key="schedule.id"
             v-bind="schedule"
+            :store="schedule.store"
             @update-start-time="updateStartTime"
             @update-end-time="updateEndTime"
             @move-schedule="moveSchedule"
@@ -31,7 +32,7 @@
 
   // Constants
   const MINUTES_PER_SLOT = 30;
-  const SLOT_HEIGHT = 84; // 6rem = 84px
+  const SLOT_HEIGHT = 112; // 6rem = 84px
 
   // State
   const times = ref(generateTimeSlots());
@@ -129,7 +130,7 @@
     const slotIndex = Math.floor(timeToMinutes(dragOverTime.value) / 30);
 
     guidelineStyle.value = {
-      top: `${slotIndex * 6}rem`,
+      top: `${slotIndex * 8}rem`,
       display: 'block',
     };
   };
@@ -169,7 +170,7 @@
     flex-direction: column;
     height: 100%;
     background-color: #faf9ff;
-    border-radius: 2rem;
+    border-radius: 1.5rem;
   }
 
   .time-table__header {
@@ -177,20 +178,20 @@
     position: sticky;
     background-color: #ffffff;
     border-bottom: solid 0.1rem #00000020;
-    text-align: center;
+
     user-select: none;
-    border-radius: 2rem 2rem 0 0;
+    border-radius: 1.5rem 1.5rem 0 0;
   }
 
   .time-table__body {
     border-top: dashed 0.1px #00000020;
     position: relative;
-    height: calc(24 * 12rem);
-    border-radius: 0 0 2rem 2rem;
+    height: calc(48 * 6rem);
   }
 
   .time-table {
     overflow: auto;
+    border-radius: 0 0 1.5rem 1.5rem;
   }
 
   .time-slots {
