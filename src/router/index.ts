@@ -7,6 +7,8 @@ import DashBoardPage from '../views/DashBoardPage.vue';
 import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
 import SideBar from "@/domain/schedule/components/SideBar.vue";
 import ParticipationDashBoard from "@/domain/participation/components/ParticipationDashBoard.vue";
+import SuppliesDashBoard from '@/domain/supply/components/SuppliesDashBoard.vue';
+
 const routes = [
   {
     path: '/',
@@ -29,7 +31,7 @@ const routes = [
       {
         path: 'travel/:id/supplies',
         name: 'TravelSupplies',
-        component: HomeDashBoard,
+        component: SuppliesDashBoard,
         // meta: { requiresAuth: true }, // 인증이 필요한 라우트
       },
       {

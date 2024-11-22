@@ -10,7 +10,7 @@
 
 <template>
   <div class="check-list-layout">
-    <div class="check-list-title-text">체크리스트</div>
+    <div class="check-list-title-text">준비물</div>
     <div class="check-item-layout">
       <CheckItemComponent
         v-for="checkItem in checkItems"

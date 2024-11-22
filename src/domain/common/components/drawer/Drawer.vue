@@ -56,7 +56,7 @@
     gap: 40px;
     padding: 30px;
     border-radius: 20px;
-    width: 290px;
+    min-width: 290px;
     height: 100%;
   }
 
