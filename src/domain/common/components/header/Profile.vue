@@ -1,10 +1,23 @@
+<script setup lang="ts">
+  import type { Participant } from '@/domain/common/model/Participant.type';
+
+  const props = defineProps<{
+    participant: Participant;
+  }>();
+</script>
+
 <template>
   <div class="profile-container">
     <div class="profile-info-container">
       <div class="profile-info-layout">
-        <div class="profile-info-text">김정현</div>
+        <div class="profile-info-text">{{ props.participant.name }}</div>
       </div>
-      <img src="/src/assets/icons/profile.png" alt="profile" class="profile-layout" />
+      <img
+        src="/src/assets/icons/profile.png"
+        alt="profile"
+        class="profile-layout"
+        :class="{ profileActive: props.participant.isActive }"
+      />
     </div>
   </div>
 </template>
@@ -24,9 +37,13 @@
   .profile-layout {
     width: 48px;
     height: 48px;
-    border: 3px solid #346aff;
+
     border-radius: 50%;
     cursor: pointer;
+  }
+
+  .profileActive {
+    border: 3px solid #346aff;
   }
 
   .profile-layout:hover {

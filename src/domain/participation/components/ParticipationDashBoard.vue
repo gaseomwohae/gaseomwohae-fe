@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import ParticipationProfile from './ParticipationProfile.vue';
-  import { ref, defineComponent } from 'vue';
+  import { ref, computed } from 'vue';
   import DropDownItem from '../../common/components/DropDownItem.vue';
   const isOpen = ref(false);
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
   import Modal from '@/domain/home/components/Modal.vue';
   import Button from '@/domain/common/components/Button.vue';
   import InputField from '@/domain/auth/components/InputField.vue';
+  import { useTripStore } from '@/stores/tripStore';
+
   const lottieAnimation = ref<any>(null);
 
   const lottieTitle = ref('Default Title');
@@ -44,6 +46,10 @@
     showAnimation();
     lottieTitle.value = '추방이 완료되었습니다.';
   };
+
+  const tripStore = useTripStore();
+
+  const participantList = computed(() => tripStore.participantList);
 </script>
 
 <template>
@@ -60,10 +66,12 @@
     <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요.">
       <template #body>
         <div class="participation-modal-layout">
-          <ParticipationProfile :clickable="true" />
-          <ParticipationProfile :clickable="true" />
-          <ParticipationProfile :clickable="true" />
-          <ParticipationProfile :clickable="true" />
+          <ParticipationProfile
+            v-for="participant in participantList"
+            :key="participant.id"
+            :clickable="true"
+            :participant="participant"
+          />
         </div>
       </template>
       <template #footer
@@ -85,10 +93,11 @@
     </div>
 
     <div class="participation-dash-board-layout">
-      <ParticipationProfile />
-      <ParticipationProfile />
-      <ParticipationProfile />
-      <ParticipationProfile />
+      <ParticipationProfile
+        v-for="participant in participantList"
+        :key="participant.id"
+        :participant="participant"
+      />
     </div>
   </div>
 </template>
@@ -108,7 +117,7 @@
     height: 100%;
     width: 100%;
     border-radius: 20px;
-    padding: 100px;
+    padding: 30px 100px;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -128,7 +137,7 @@
     background-color: white;
     position: absolute;
     top: 30%;
-    transform: translate(-80%, 0px);
+    transform: translate(-80%, -60px);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -150,13 +159,13 @@
   .fade-enter-from,
   .fade-leave-to {
     opacity: 0;
-    transform: translate(-80%, -30px);
+    transform: translate(-80%, -90px);
   }
 
   .fade-enter-to,
   .fade-leave-from {
     opacity: 1;
-    transform: translate(-80%, 0px);
+    transform: translate(-80%, -60px);
   }
 
   .participation-modal-layout {

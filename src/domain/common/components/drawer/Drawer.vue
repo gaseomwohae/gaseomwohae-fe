@@ -4,38 +4,57 @@
   import Button from '../../components/Button.vue';
   import ProfileButton from './ProfileButton.vue';
   import { useRouter } from 'vue-router';
+  import { useTripStore } from '@/stores/tripStore';
+  import { computed } from 'vue';
 
+  const tripStore = useTripStore();
   const router = useRouter();
+
+  const selectedTripId = computed(() => {
+    return tripStore.selectedTripId;
+  });
+
+  const buttonText = computed(() => {
+    return selectedTripId.value !== null ? '계획 수정하기' : '여행 계획하기';
+  });
+
+  const navigateTo = (name: string) => {
+    if (selectedTripId.value !== null) {
+      router.push({ name: name, params: { id: selectedTripId.value } });
+    }
+  };
+
+  const navigateToTravel = () => {
+    if (selectedTripId.value !== null) {
+      router.push({ name: 'Travel', params: { id: selectedTripId.value } });
+    }
+  };
 </script>
+
 <template>
   <div class="drawer-layout">
-    <div class="logo-layout" @click="router.push({ name: 'Travel', params: { id: '1' } })">
+    <div class="logo-layout" @click="navigateTo('Travel')">
       <Logo />
     </div>
-    <Button value="계획 수정하기" fontSize="14px" height="46px" />
+    <Button :value="buttonText" fontSize="14px" height="46px" @click="navigateToTravel" />
     <div class="drawer-button-layout">
-      <DrawerButton
-        text="홈"
-        src="home"
-        @click="router.push({ name: 'Travel', params: { id: '1' } })"
-        routeName="Travel"
-      />
+      <DrawerButton text="홈" src="home" @click="navigateTo('Travel')" routeName="Travel" />
       <DrawerButton
         text="일정"
         src="schedule"
-        @click="router.push({ name: 'Schedule', params: { id: '1' } })"
+        @click="navigateTo('Schedule')"
         routeName="Schedule"
       />
       <DrawerButton
         text="준비물"
         src="travel_supplies"
-        @click="router.push({ name: 'TravelSupplies', params: { id: '1' } })"
+        @click="navigateTo('TravelSupplies')"
         routeName="TravelSupplies"
       />
       <DrawerButton
         text="참여자"
         src="participants"
-        @click="router.push({ name: 'Participants', params: { id: '1' } })"
+        @click="navigateTo('Participants')"
         routeName="Participants"
       />
     </div>
