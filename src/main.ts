@@ -1,10 +1,10 @@
 import '@/assets/styles/base.css';
 import router from '@/router/index.js';
 import { createPinia } from 'pinia';
-import { createApp } from 'vue';
-import App from './App.vue';
 import VCalendar from 'v-calendar';
 import 'v-calendar/style.css';
+import { createApp } from 'vue';
+import App from './App.vue';
 
 const pinia = createPinia();
 const app = createApp(App);

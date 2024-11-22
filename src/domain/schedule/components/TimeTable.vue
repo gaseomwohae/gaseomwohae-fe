@@ -164,6 +164,7 @@
 <style scoped>
   .schedule-container {
     display: flex;
+    min-width: 25rem;
     width: 25rem;
     flex-direction: column;
     height: 100%;

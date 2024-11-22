@@ -1,12 +1,12 @@
 import LoginForm from '@/domain/auth/components/LoginForm.vue';
 import SignUpForm from '@/domain/auth/components/SignUpForm.vue';
+import ParticipationDashBoard from '@/domain/participation/components/ParticipationDashBoard.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
+import SchedulePage from '../domain/schedule/components/SchedulePage.vue';
 import { useAuthStore } from '../stores/auth';
 import AuthPage from '../views/AuthPage.vue';
 import DashBoardPage from '../views/DashBoardPage.vue';
-import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
-import SideBar from "@/domain/schedule/components/SideBar.vue";
-import ParticipationDashBoard from "@/domain/participation/components/ParticipationDashBoard.vue";
 const routes = [
   {
     path: '/',
@@ -18,12 +18,11 @@ const routes = [
         path: 'travel/:id',
         name: 'Travel',
         component: HomeDashBoard,
-
       },
       {
         path: 'travel/:id/schedule',
         name: 'Schedule',
-        component: SideBar,
+        component: SchedulePage,
         // meta: { requiresAuth: true }, // 인증이 필요한 라우트
       },
       {
@@ -40,7 +39,7 @@ const routes = [
       },
     ],
   },
- 
+
   {
     path: '/auth',
     name: 'Auth',

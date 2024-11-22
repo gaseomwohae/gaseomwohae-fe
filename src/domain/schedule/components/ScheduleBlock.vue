@@ -160,7 +160,7 @@
     left: 10%;
     position: absolute;
     margin: 0 1rem;
-    width: calc(100% - 4.5rem);
+    width: calc(100% - 4.3rem);
   }
 
   /* 실제 드래그 영역 */

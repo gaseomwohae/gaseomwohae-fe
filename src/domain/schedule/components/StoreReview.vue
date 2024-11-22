@@ -93,6 +93,7 @@
 
 <style scoped>
   .store-review {
+    min-width: 25rem;
     width: 25rem;
     height: 100%;
     display: flex;
@@ -101,7 +102,6 @@
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 1.5rem;
-    border: 1px solid #000000;
     overflow: auto;
   }
 
