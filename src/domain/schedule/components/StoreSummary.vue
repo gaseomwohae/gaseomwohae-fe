@@ -28,7 +28,6 @@
   const emits = defineEmits(['selectStore']);
 
   function selectStore() {
-    console.log('click!!!!!!!!!!!!');
     emits('selectStore', storeData.id);
   }
 </script>
@@ -47,7 +46,10 @@
   img {
     width: 5rem;
     height: 5rem;
+    min-width: 5rem;
+    min-height: 5rem;
     border-radius: 1.5rem;
+    object-fit: cover;
   }
 
   .store-card__info {

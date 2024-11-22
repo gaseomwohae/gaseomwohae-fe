@@ -12,15 +12,15 @@
 </template>
 
 <script setup lang="ts">
+  import type { Store } from '@/domain/schedule/model/store.type';
   import { searchPlaces } from '@/domain/schedule/utils/map.util';
   import { useStoreStore } from '@/stores/store';
   import { ref } from 'vue';
-
   const searchValue = ref<string>('');
   const store = useStoreStore();
 
   const handleInput = async () => {
-    const stores = await searchPlaces(searchValue.value);
+    const stores: Store[] = await searchPlaces(searchValue.value);
     store.setSearchedStores(stores);
   };
 </script>

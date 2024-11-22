@@ -25,7 +25,6 @@
     () => storeStore.searchedStores,
     (stores) => {
       storeList.value = stores;
-      console.log(storeList.value);
     },
   );
 
