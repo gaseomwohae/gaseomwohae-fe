@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
   import { computed, ref } from 'vue';
+  import { minutesToTime, timeToMinutes } from '../utils/timeUtils';
 
   const MINUTES_PER_SLOT = 30;
   const SLOT_HEIGHT = 6; // px (6rem)
@@ -37,10 +38,6 @@
 
   const isResizing = ref(false);
   const resizeType = ref<'top' | 'bottom' | null>(null);
-
-  const isDragging = ref(false);
-  const dragStartY = 0;
-  const originalStartTime = '';
 
   const handleDragStart = (e: DragEvent) => {
     if (!e.currentTarget || !e.dataTransfer) return;
@@ -72,19 +69,6 @@
     const blockElement = e.currentTarget as HTMLElement;
     blockElement.removeAttribute('dragging');
     blockElement.removeAttribute('data-mouse-offset');
-  };
-
-  // 시간 문자열을 분으로 변환 (예: "13:30" -> 810)
-  const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(':').map(Number);
-    return hours * 60 + minutes;
-  };
-
-  // 분을 시간 문자열로 변환 (예: 810 -> "13:30")
-  const minutesToTime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
   };
 
   // rem을 px로 변환하는 함수 추가
@@ -169,70 +153,55 @@
 
 <style scoped>
   .schedule-block {
-    background-color: #9d9d9d;
+    background-color: #ffffff;
     border-radius: 1rem;
     cursor: grab;
     user-select: none;
     left: 10%;
     position: absolute;
     margin: 0 1rem;
-    width: calc(100% - 2rem);
+    width: calc(100% - 4.5rem);
   }
 
-  .schedule-block[draggable='false'] {
-    cursor: row-resize;
-  }
-
+  /* 실제 드래그 영역 */
   .resize-handle {
     position: absolute;
     left: 0;
     right: 0;
-    height: 1rem;
+    width: 100%;
+    height: 1.3rem;
     cursor: row-resize;
-    background-color: #f20000;
+    background-color: transparent;
     z-index: 2;
   }
 
+  /* 드래그 영역 표시(실제 영역보다 작음) */
   .resize-handle::after {
     content: '';
     position: absolute;
+    top: 0;
     left: 0;
     right: 0;
-    height: 0.2rem;
-    background-color: transparent;
+    bottom: 0;
+    width: 20%;
+    height: 0.5rem;
+    border-radius: 1rem;
+    margin: 0 auto;
+    background-color: rgb(223, 223, 223);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .schedule-block:hover .resize-handle::after {
+    opacity: 1;
   }
 
   .resize-handle.top {
-    top: -0.25rem;
-  }
-
-  .resize-handle.top::after {
-    top: -0.25rem;
+    top: 0rem;
   }
 
   .resize-handle.bottom {
-    bottom: -0.25rem;
-  }
-
-  .resize-handle.bottom::after {
-    bottom: -1rem;
-  }
-
-  .schedule-block:hover .resize-handle.top::after,
-  .schedule-block:hover .resize-handle.bottom::after {
-    background-color: rgb(0, 240, 156);
-  }
-
-  .drag-indicator {
-    display: flex;
-    gap: 6rem;
-    opacity: 0;
-    transition: opacity 0.2;
-    pointer-events: none;
-  }
-
-  .schedule-block:hover .drag-indicator {
-    opacity: 0.5;
+    bottom: -0.5rem;
   }
 
   /* 리사이징 중일 때는 드래그 비활성화 */
