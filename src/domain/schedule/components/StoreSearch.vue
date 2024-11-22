@@ -13,6 +13,8 @@
 <style scoped>
   .store-search {
     min-width: 25rem;
+    width: 25rem;
+    max-width: 25rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;

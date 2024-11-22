@@ -1,38 +1,48 @@
 <template>
-  <div class="store-list">
-    <div class="store" v-for="store in storeList" :key="store.id">
-      <StoreSummary :store="store" @click="selectStore(store.id)" />
+  <div class="store-list" v-if="storeList.length > 0">
+    <div
+      class="store"
+      v-for="store in storeList"
+      :key="store.id"
+      draggable="true"
+      @dragstart="dragStart($event, store)"
+    >
+      <StoreSummary :store="store" @select-store="selectStore(store.id)" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { useStoreStore } from '@/stores/store';
-  import { onMounted, ref } from 'vue';
+  import { ref, watch } from 'vue';
   import type { Store } from '../model/store.type';
   import StoreSummary from './StoreSummary.vue';
 
   const storeList = ref<Store[]>([]);
   const storeStore = useStoreStore();
 
-  onMounted(async () => {
-    //storeList.value = await storeService.getStoreList();
-    // 임시 데이터
-    for (let i = 0; i < 10; i++) {
-      storeList.value.push({
-        id: i,
-        img: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230328_14%2F16799977826750ra8V_JPEG%2F320387422_892651581733361_6537465896771139005_n.jpg',
-        category: '햄버거',
-        name: '버거베이',
-        address: '부산시 기장군',
-        reviewRate: 4.5,
-        description: '맛있는 햄버거 맛집',
-      });
-    }
-  });
+  watch(
+    () => storeStore.searchedStores,
+    (stores) => {
+      storeList.value = stores;
+      console.log(storeList.value);
+    },
+  );
 
   function selectStore(id: number) {
     storeStore.setSelectedStoreId(id);
+  }
+
+  function dragStart(event: DragEvent, store: Store) {
+    if (event.dataTransfer) {
+      const dragData = {
+        isNewSchedule: true,
+        store: store,
+        duration: 30,
+      };
+      event.dataTransfer.setData('application/json', JSON.stringify(dragData));
+      event.dataTransfer.effectAllowed = 'move';
+    }
   }
 </script>
 
@@ -50,5 +60,10 @@
     background-color: #fff;
     border-radius: 1.5rem;
     padding: 1rem;
+    cursor: grab;
+  }
+
+  .store:active {
+    cursor: grabbing;
   }
 </style>

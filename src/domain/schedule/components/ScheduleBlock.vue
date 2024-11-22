@@ -1,10 +1,10 @@
 <template>
   <div
+    :data-schedule-id="id"
+    draggable="true"
+    @dragstart="handleDragStart"
     class="schedule-block"
     :style="blockStyle"
-    :draggable="!isResizing"
-    @dragstart="handleDragStart"
-    @dragend="handleDragEnd"
   >
     <div class="resize-handle top" @mousedown.stop.prevent="startResize('top')"></div>
     <div class="schedule-content">
@@ -46,27 +46,20 @@
   const resizeType = ref<'top' | 'bottom' | null>(null);
 
   const handleDragStart = (e: DragEvent) => {
-    if (!e.currentTarget || !e.dataTransfer) return;
+    console.log('ScheduleBlock dragStart', props.id); // 디버깅용
 
-    const blockElement = e.currentTarget as HTMLElement;
-    blockElement.setAttribute('dragging', 'true');
-
-    // 마우스와 블록 상단과의 거리 계산
-    const blockRect = blockElement.getBoundingClientRect();
-    const mouseOffset = e.clientY - blockRect.top;
-    blockElement.setAttribute('data-mouse-offset', mouseOffset.toString());
-
-    // 현재 일정의 duration 계산
-    const duration = timeToMinutes(props.endTime) - timeToMinutes(props.startTime);
-
-    e.dataTransfer.setData(
-      'application/json',
-      JSON.stringify({
+    if (e.dataTransfer) {
+      const dragData = {
         scheduleId: props.id,
-        duration: duration,
-      }),
-    );
-    e.dataTransfer.effectAllowed = 'move';
+        duration: timeToMinutes(props.endTime) - timeToMinutes(props.startTime),
+      };
+
+      console.log('Setting drag data:', dragData); // 디버깅용
+
+      // MIME 타입을 정확하게 지정
+      e.dataTransfer.setData('application/json', JSON.stringify(dragData));
+      e.dataTransfer.effectAllowed = 'move';
+    }
   };
 
   const handleDragEnd = (e: DragEvent) => {

@@ -15,4 +15,5 @@ export interface ScheduleTime {
   id: number;
   startTime: string;
   endTime: string;
+  store: Store;
 }

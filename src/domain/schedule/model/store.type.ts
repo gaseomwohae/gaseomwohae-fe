@@ -5,9 +5,14 @@ export interface Store {
   name: string;
   img: string;
   address: string;
+  roadAddress: string;
   category: string;
+  phone: string;
+  url: string;
   reviewRate: number;
   description: string;
+  x: number;
+  y: number;
 }
 
 export interface UserReview {
