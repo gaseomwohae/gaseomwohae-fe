@@ -1,41 +1,37 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { Destination } from '../model/destination.type';
+
+defineProps<{
+  accommodations: Destination[];
+}>();
+
+// 기본 이미지 경로 설정
+const defaultImage = '/src/assets/images/auth-image.png';
+
+// 이미지 에러 처리 함수
+const handleImageError = (e: Event) => {
+  const imgElement = e.target as HTMLImageElement;
+  imgElement.src = defaultImage;
+};
+</script>
 
 <template>
   <div class="accommodation-card-layout">
     <div class="accommodation-card-title-text" style="color: #9aa2ad">숙소</div>
     <div class="accommodation-card-list-layout">
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
+      <div 
+        class="accommodation-item-layout" 
+        v-for="accommodation in accommodations" 
+        :key="accommodation.id"
+      >
+        <div class="accommodation-card-title-text">{{ accommodation.name }}</div>
+        <img 
+          :src="accommodation.imgSrc || defaultImage"
+          @error="handleImageError"
+          alt="accommodation" 
+        />
       </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
-      <div class="accommodation-item-layout">
-        <div class="accommodation-card-title-text">숙소 타이틀</div>
-        <img src="/src/assets/images/auth-image.png" alt="accommodation" />
-      </div>
+
     </div>
   </div>
 </template>

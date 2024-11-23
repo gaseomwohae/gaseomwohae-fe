@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import type { Supply } from './model/supply.type';
+  import type { SupplyItem } from './model/supply.type';
 
   const props = defineProps<{
-    supply: Supply;
+    supply: SupplyItem;
   }>();
 </script>
 

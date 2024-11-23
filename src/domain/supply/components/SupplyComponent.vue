@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import SupplyCard from './SupplyCard.vue';
-  import type { Supply } from './model/supply.type';
-  const props = defineProps<{
-    supplies: Supply[];
+  import type { SupplyItem } from './model/supply.type';
+  const props = defineProps<{ 
+    supplies: SupplyItem[]; 
     backgroundColor: string;
   }>();
 </script>
