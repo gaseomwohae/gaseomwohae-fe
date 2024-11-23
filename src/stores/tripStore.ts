@@ -21,7 +21,8 @@ export const useTripStore = defineStore('tripStore', {
       this.participantList = participants;
     }
   }
-});
+}
+);
 
 
 export const useTripInfoStore = defineStore('tripInfo', {

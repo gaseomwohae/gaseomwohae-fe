@@ -190,6 +190,11 @@
 
   const tripInfo = computed(() => tripInfoStore.tripInfo);
 
+  const localVisitors = computed(() => {
+    if (!tripInfo.value?.localVisitors) return [];
+    return tripInfo.value.localVisitors;
+  });
+
   // 기간 계산
 const getTripDuration = computed(() => {
   if (!tripInfo.value) return '0일';
@@ -275,7 +280,7 @@ const getRandomItems = (category: SupplyCategory, count: number = 2) => {
           <SupplyList v-if="tripInfo" :supplies="tripInfo.supplies" />
         </div>
         <div class="dashboard-right-layout">
-          <Chart v-if="tripInfo" :localVisitors="tripInfo.localVisitors" />
+          <Chart v-if="tripInfo" :localVisitors="localVisitors" />
           <SimpleMap />
         </div>
       </div>

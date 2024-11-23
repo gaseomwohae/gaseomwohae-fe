@@ -12,7 +12,7 @@ const props = defineProps<{
   <div class="check-list-layout">
     <div class="check-list-title-text">준비물</div>
     
-    <div class="categories-layout">
+    <div class="categories-layout" v-if="supplies && supplies.length > 0">
       <!-- 각 카테고리별 섹션 -->
       <div 
         v-for="supplyGroup in props.supplies" 
@@ -36,6 +36,10 @@ const props = defineProps<{
           />
         </div>
       </div>
+    </div>
+
+    <div v-else class="no-supply-message">
+      등록된 준비물이 없습니다
     </div>
   </div>
 </template>

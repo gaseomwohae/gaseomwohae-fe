@@ -22,12 +22,32 @@ const formData = ref({
 });
 
 const handleSubmit = () => {
-  // 여기서 새로운 여행 정보 생성 로직 추가
-  tripStore.clearTripInfo();
-   
-  const newTripInfo: TripInfo = {
+  // 필수 입력값 검증
+  if (!formData.value.startDate) {
+    alert('시작일을 입력해주세요.');
+    return;
+  }
+  if (!formData.value.endDate) {
+    alert('종료일을 입력해주세요.');
+    return;
+  }
+  if (!formData.value.destination) {
+    alert('목적지를 입력해주세요.');
+    return;
+  }
+
+  // 날짜 유효성 검증
+  const startDate = new Date(formData.value.startDate);
+  const endDate = new Date(formData.value.endDate);
+  
+  if (endDate < startDate) {
+    alert('종료일은 시작일보다 늦어야 합니다.');
+    return;
+  }
+
+  const newTripInfo = {
     trip: {
-      id: Date.now(), // 임시 ID 생성
+      id: Date.now(),
       name: `${formData.value.destination} 여행`
     },
     tripStartDate: formData.value.startDate,
@@ -56,11 +76,9 @@ const handleSubmit = () => {
     localVisitors: []
   };
 
-  tripStore.createTrip(newTripInfo); // tripStore에 createTrip 메서드 필요
-  emit('create');
-  emit('close');
-  
+  tripStore.createTrip(newTripInfo);
   acceptLottieRef.value?.showAnimation();
+  emit('close');
 };
 </script>
 
@@ -75,6 +93,7 @@ const handleSubmit = () => {
             label="시작일"
             v-model="formData.startDate"
             placeholder="여행 시작일"
+            required
           />
           <InputField
             type="date"
@@ -82,6 +101,7 @@ const handleSubmit = () => {
             label="종료일"
             v-model="formData.endDate"
             placeholder="여행 종료일"
+            required
           />
           <InputField
             type="text"
@@ -89,6 +109,7 @@ const handleSubmit = () => {
             label="목적지"
             v-model="formData.destination"
             placeholder="여행 목적지"
+            required
           />
         </div>
       </template>

@@ -3,7 +3,7 @@
   import DrawerButton from './DrawerButton.vue';
   import Button from '../../components/Button.vue';
   import ProfileButton from './ProfileButton.vue';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import { useTripStore } from '@/stores/tripStore';
   import { computed, ref } from 'vue';
   import EditTripModal from '@/domain/home/components/EditTripModal.vue';
@@ -11,13 +11,14 @@
 
   const tripStore = useTripStore();
   const router = useRouter();
+  const route = useRoute();
 
   const selectedTripId = computed(() => {
     return tripStore.selectedTripId;
   });
 
   const buttonText = computed(() => {
-    return selectedTripId.value !== null ? '계획 수정하기' : '여행 계획하기';
+    return route.name === 'Home' ? '여행 계획하기' : '여행 수정하기';
   });
 
   const navigateTo = (name: string) => {
@@ -36,10 +37,10 @@
   const showCreateModal = ref(false);
 
   const handleEditClick = () => {
-    if (selectedTripId.value !== null) {
-      showEditModal.value = true;
-    } else {
+    if (route.name === 'Home') {
       showCreateModal.value = true;
+    } else {
+      showEditModal.value = true;
     }
   };
 
@@ -53,7 +54,7 @@
   };
 
   const handleTripCreate = () => {
-    // 필요한 경우 추가 생성 로직
+    showCreateModal.value = false;
   };
 </script>
 
