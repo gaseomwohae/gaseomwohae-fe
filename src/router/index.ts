@@ -4,7 +4,7 @@ import ParticipationDashBoard from '@/domain/participation/components/Participat
 import SuppliesDashBoard from '@/domain/supply/components/SuppliesDashBoard.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeDashBoard from '../domain/home/components/HomeDashBoard.vue';
-import SchedulePage from '../domain/schedule/components/SchedulePage.vue';
+import SchedulePage from '../domain/travel/components/SchedulePage.vue';
 import { useAuthStore } from '../stores/auth';
 import AuthPage from '../views/AuthPage.vue';
 import DashBoardPage from '../views/DashBoardPage.vue';

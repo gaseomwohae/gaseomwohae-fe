@@ -1,13 +1,11 @@
 <template>
-  <div class="schedule-container">
-    <div class="map-container">
-      <WideMap />
-    </div>
+  <div class="schedule-page">
+    <div id="map-container"></div>
     <div class="side-bar">
-      <StoreSearch v-if="sideBarVisible" />
-      <TimeTable v-if="sideBarVisible" />
+      <PlaceList v-if="sideBarVisible" />
+      <ScheduleList v-if="sideBarVisible" />
       <div class="side-bar__store-detail">
-        <StoreReview v-if="sideBarVisible" />
+        <PlaceDetail v-if="sideBarVisible" />
         <button @click="toggleStoreReview">
           <img
             v-if="sideBarVisible"
@@ -22,21 +20,30 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue';
-  import StoreReview from './StoreReview.vue';
-  import StoreSearch from './StoreSearch.vue';
-  import TimeTable from './TimeTable.vue';
-  import WideMap from './WideMap.vue';
-
+  import { useMapStore } from '@/stores/map.store';
+  import { onMounted, ref } from 'vue';
+  import { mapService } from '../service/map.service';
+  import PlaceDetail from './PlaceDetail.vue';
+  import PlaceList from './PlaceList.vue';
+  import ScheduleList from './ScheduleList.vue';
   const sideBarVisible = ref(true);
+  const mapStore = useMapStore();
 
   function toggleStoreReview() {
     sideBarVisible.value = !sideBarVisible.value;
   }
+
+  onMounted(async () => {
+    console.log('Before map init');
+    const map = mapService.initMap('map-container', 33.450701, 126.570667, 3);
+    console.log('Map created:', map);
+    mapStore.setMap(map);
+    console.log('After setMap:', mapStore.map);
+  });
 </script>
 
 <style scoped>
-  .schedule-container {
+  .schedule-page {
     position: relative;
     width: 100%;
     height: 100%;
@@ -79,5 +86,11 @@
 
   .side-bar__store-detail button:hover {
     background-color: #faf9ff;
+  }
+
+  #map-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
   }
 </style>

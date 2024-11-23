@@ -12,16 +12,26 @@
 </template>
 
 <script setup lang="ts">
-  import type { Store } from '@/domain/schedule/model/store.type';
-  import { searchPlaces } from '@/domain/schedule/utils/map.util';
-  import { useStoreStore } from '@/stores/store';
-  import { ref } from 'vue';
+  import type { Place } from '@/domain/travel/model/travel.type';
+  import { mapService } from '@/domain/travel/service/map.service';
+  import { useMapStore } from '@/stores/map.store';
+  import { usePlaceStore } from '@/stores/place.store';
+  import { computed, ref } from 'vue';
+
   const searchValue = ref<string>('');
-  const store = useStoreStore();
+  const placeStore = usePlaceStore();
+  const mapStore = useMapStore();
+  const map = computed(() => mapStore.map);
 
   const handleInput = async () => {
-    const stores: Store[] = await searchPlaces(searchValue.value);
-    store.setSearchedStores(stores);
+    if (!map.value || !searchValue.value) return;
+
+    const places: Place[] = await mapService.searchPlaces(map.value, searchValue.value);
+    for (const place of places) {
+      console.log(place.name);
+    }
+
+    placeStore.updateSearchedPlaces(places);
   };
 </script>
 

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import ParticipationProfile from './ParticipationProfile.vue';
-  import { ref, computed } from 'vue';
-  import DropDownItem from '../../common/components/DropDownItem.vue';
-  const isOpen = ref(false);
-  import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
-  import Modal from '@/domain/home/components/Modal.vue';
-  import Button from '@/domain/common/components/Button.vue';
   import InputField from '@/domain/auth/components/InputField.vue';
+  import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
+  import Button from '@/domain/common/components/Button.vue';
+  import Modal from '@/domain/home/components/Modal.vue';
   import { useTripStore } from '@/stores/tripStore';
+  import { computed, ref } from 'vue';
+  import DropDownItem from '../../common/components/DropDownItem.vue';
+  import ParticipationProfile from './ParticipationProfile.vue';
+  const isOpen = ref(false);
 
   const lottieAnimation = ref<any>(null);
 
