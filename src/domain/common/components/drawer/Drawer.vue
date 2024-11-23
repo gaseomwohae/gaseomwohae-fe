@@ -5,7 +5,9 @@
   import ProfileButton from './ProfileButton.vue';
   import { useRouter } from 'vue-router';
   import { useTripStore } from '@/stores/tripStore';
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
+  import EditTripModal from '@/domain/home/components/EditTripModal.vue';
+  import CreateTripModal from '@/domain/home/components/CreateTripModal.vue';
 
   const tripStore = useTripStore();
   const router = useRouter();
@@ -29,6 +31,30 @@
       router.push({ name: 'Travel', params: { id: selectedTripId.value } });
     }
   };
+
+  const showEditModal = ref(false);
+  const showCreateModal = ref(false);
+
+  const handleEditClick = () => {
+    if (selectedTripId.value !== null) {
+      showEditModal.value = true;
+    } else {
+      showCreateModal.value = true;
+    }
+  };
+
+  const handleModalClose = () => {
+    showEditModal.value = false;
+    showCreateModal.value = false;
+  };
+
+  const handleTripUpdate = () => {
+    showEditModal.value = false;
+  };
+
+  const handleTripCreate = () => {
+    // 필요한 경우 추가 생성 로직
+  };
 </script>
 
 <template>
@@ -36,7 +62,7 @@
     <div class="logo-layout" @click="navigateTo('Travel')">
       <Logo />
     </div>
-    <Button :value="buttonText" fontSize="14px" height="46px" @click="navigateToTravel" />
+    <Button :value="buttonText" fontSize="14px" height="46px" @click="handleEditClick" />
     <div class="drawer-button-layout">
       <DrawerButton text="홈" src="home" @click="navigateTo('Travel')" routeName="Travel" />
       <DrawerButton
@@ -58,7 +84,18 @@
         routeName="Participants"
       />
     </div>
+    <EditTripModal 
+      :show="showEditModal"
+      @close="handleModalClose"
+      @update="handleTripUpdate"
+    />
+    <CreateTripModal 
+      :show="showCreateModal"
+      @close="handleModalClose"
+      @create="handleTripCreate"
+    />
     <ProfileButton />
+
   </div>
 </template>
 
