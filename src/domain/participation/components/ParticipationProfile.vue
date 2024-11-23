@@ -7,6 +7,7 @@
   const props = defineProps({
     clickable: Boolean,
     participant: Object as PropType<Participant>,
+    selected: Boolean,
   });
 
   console.log(props.participant);
@@ -22,7 +23,13 @@
 </script>
 
 <template>
-  <div class="participation-profile-layout" @click="toggleSelect">
+  <div 
+    class="participation-profile-layout" 
+    :class="{ 
+      'clickable': clickable, 
+      'selected': selected 
+    }"
+  >
     <img
       src="/src/assets/icons/profile.png"
       :class="{ selected: isSelected, clickable: clickable }"
@@ -54,5 +61,10 @@
 
   .clickable {
     cursor: pointer; /* 클릭 가능할 때 커서 변경 */
+  }
+
+  .selected {
+    border: 2px solid #FC0E29;
+    background-color: rgba(252, 14, 41, 0.1);
   }
 </style>

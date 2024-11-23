@@ -5,6 +5,7 @@
 <script setup lang="ts">
   interface ButtonProps {
     value?: string;
+
     backgroundColor?: string;
     fontColor?: string;
     fontSize?: string;
@@ -13,6 +14,7 @@
 
   const props = withDefaults(defineProps<ButtonProps>(), {
     value: 'button',
+    
     backgroundColor: '#346aff',
     fontColor: '#fff',
     fontSize: '16px',
