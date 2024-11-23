@@ -1,21 +1,19 @@
 <script setup lang="ts">
   import HeaderDropDown from './HeaderDropDown.vue';
   import Participation from './Participation.vue';
-  import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
-  import type { ParticipantList } from '@/domain/common/model/Participant.type';
-  const props = defineProps<{
-    tripSimpleList: TripSimpleList;
-    selectedTripId: number | null;
-    participantList: ParticipantList;
-  }>();
+  import { useTripStore } from '@/stores/tripStore';
+  import { storeToRefs } from 'pinia';
+
+  const tripStore = useTripStore();
+  const { tripSimpleList, selectedTripId, participantList } = storeToRefs(tripStore);
 </script>
 <template>
   <div class="header-layout">
     <HeaderDropDown
-      :trip-simple-list="props.tripSimpleList"
-      :selected-trip-id="props.selectedTripId"
+      :trip-simple-list="tripSimpleList"
+      :selected-trip-id="selectedTripId"
     />
-    <Participation :participant-list="props.participantList" />
+    <Participation :participant-list="participantList" />
   </div>
 </template>
 <style scoped>

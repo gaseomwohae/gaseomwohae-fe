@@ -65,12 +65,12 @@
     display: flex;
     flex-direction: row;
     position: fixed;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 20px;
     height: fit-content;
     width: fit-content;
     padding-right: 30px;
-    z-index: 1000; /* 다른 요소 위에 표시되도록 설정 */
+    z-index: 9999; /* 더 높은 z-index 값으로 수정 */
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

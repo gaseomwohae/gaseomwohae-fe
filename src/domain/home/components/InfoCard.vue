@@ -18,6 +18,8 @@
   .info-card-layout {
     width: 250px;
     display: flex;
+    min-height: 170.58px;
+    max-height: 170.58px;
     flex-direction: column;
     padding: 30px;
     background-color: white;

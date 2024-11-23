@@ -3,19 +3,22 @@
   import DrawerButton from './DrawerButton.vue';
   import Button from '../../components/Button.vue';
   import ProfileButton from './ProfileButton.vue';
-  import { useRouter } from 'vue-router';
+  import { useRouter, useRoute } from 'vue-router';
   import { useTripStore } from '@/stores/tripStore';
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
+  import EditTripModal from '@/domain/home/components/EditTripModal.vue';
+  import CreateTripModal from '@/domain/home/components/CreateTripModal.vue';
 
   const tripStore = useTripStore();
   const router = useRouter();
+  const route = useRoute();
 
   const selectedTripId = computed(() => {
     return tripStore.selectedTripId;
   });
 
   const buttonText = computed(() => {
-    return selectedTripId.value !== null ? '계획 수정하기' : '여행 계획하기';
+    return route.name === 'Home' ? '여행 계획하기' : '여행 수정하기';
   });
 
   const navigateTo = (name: string) => {
@@ -29,6 +32,30 @@
       router.push({ name: 'Travel', params: { id: selectedTripId.value } });
     }
   };
+
+  const showEditModal = ref(false);
+  const showCreateModal = ref(false);
+
+  const handleEditClick = () => {
+    if (route.name === 'Home') {
+      showCreateModal.value = true;
+    } else {
+      showEditModal.value = true;
+    }
+  };
+
+  const handleModalClose = () => {
+    showEditModal.value = false;
+    showCreateModal.value = false;
+  };
+
+  const handleTripUpdate = () => {
+    showEditModal.value = false;
+  };
+
+  const handleTripCreate = () => {
+    showCreateModal.value = false;
+  };
 </script>
 
 <template>
@@ -36,7 +63,7 @@
     <div class="logo-layout" @click="navigateTo('Travel')">
       <Logo />
     </div>
-    <Button :value="buttonText" fontSize="14px" height="46px" @click="navigateToTravel" />
+    <Button :value="buttonText" fontSize="14px" height="46px" @click="handleEditClick" />
     <div class="drawer-button-layout">
       <DrawerButton text="홈" src="home" @click="navigateTo('Travel')" routeName="Travel" />
       <DrawerButton
@@ -58,7 +85,18 @@
         routeName="Participants"
       />
     </div>
+    <EditTripModal 
+      :show="showEditModal"
+      @close="handleModalClose"
+      @update="handleTripUpdate"
+    />
+    <CreateTripModal 
+      :show="showCreateModal"
+      @close="handleModalClose"
+      @create="handleTripCreate"
+    />
     <ProfileButton />
+
   </div>
 </template>
 

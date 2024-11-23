@@ -4,14 +4,23 @@
   import Button from '@/domain/common/components/Button.vue';
   import Modal from '@/domain/home/components/Modal.vue';
   import { useTripStore } from '@/stores/tripStore';
-  import { computed, ref } from 'vue';
+  import { ref } from 'vue';
   import DropDownItem from '../../common/components/DropDownItem.vue';
   import ParticipationProfile from './ParticipationProfile.vue';
+
+  import { storeToRefs } from 'pinia';
+
+  const tripStore = useTripStore();
+  const { participantList } = storeToRefs(tripStore);
+
   const isOpen = ref(false);
-
   const lottieAnimation = ref<any>(null);
-
   const lottieTitle = ref('Default Title');
+  const selectedParticipantId = ref<number | null>(null);
+  const showInviteModal = ref(false);
+  const showKickModal = ref(false);
+
+  const modalHeader = ref('새로운 멤버를 초대해주세요.');
 
   const onMenuClick = () => {
     isOpen.value = !isOpen.value;
@@ -20,6 +29,7 @@
   const showAnimation = () => {
     lottieAnimation.value.showAnimation();
   };
+
   const onSelectItem = (boolean: boolean) => {
     isOpen.value = false;
     if (boolean) {
@@ -29,39 +39,41 @@
     }
   };
 
-  const showInviteModal = ref(false);
+  const handleParticipantSelect = (id: number) => {
+    console.log('Selected participant for removal:', id);
+    selectedParticipantId.value = id;
+  };
 
-  const modalHeader = '초대하실 사용자의 이메일을 입력해주세요.';
+  const handleKickClose = () => {
+    if (selectedParticipantId.value !== null) {
+      console.log('Current participant list:', participantList.value);
+      console.log('Attempting to remove participant ID:', selectedParticipantId.value);
+
+      const updatedList = participantList.value.filter((participant) => {
+        const keep = participant.id !== selectedParticipantId.value;
+        console.log(`Participant ${participant.id}: ${keep ? 'keeping' : 'removing'}`);
+        return keep;
+      });
+
+      console.log('Updated participant list:', updatedList);
+      tripStore.setParticipantList(updatedList);
+      console.log('Store updated with new list');
+
+      selectedParticipantId.value = null;
+    }
+    showKickModal.value = false;
+    showAnimation();
+    lottieTitle.value = '추방이 완료되었습니다.';
+  };
 
   const handleInviteClose = () => {
     showInviteModal.value = false;
     showAnimation();
     lottieTitle.value = '초대가 완료되었습니다.';
   };
-
-  const showKickModal = ref(false);
-
-  const handleKickClose = () => {
-    showKickModal.value = false;
-    showAnimation();
-    lottieTitle.value = '추방이 완료되었습니다.';
-  };
-
-  const tripStore = useTripStore();
-
-  const participantList = computed(() => tripStore.participantList);
 </script>
 
 <template>
-  <div>
-    <Modal v-if="showInviteModal" :header="modalHeader">
-      <template #body
-        ><InputField id="modal-input" placeholder="이메일을 입력해주세요." type="email"
-      /></template>
-      <template #footer><Button @click="handleInviteClose" value="초대하기"></Button></template>
-    </Modal>
-  </div>
-
   <div>
     <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요.">
       <template #body>
@@ -71,12 +83,28 @@
             :key="participant.id"
             :clickable="true"
             :participant="participant"
+            :selected="participant.id === selectedParticipantId"
+            @click="handleParticipantSelect(participant.id)"
           />
         </div>
       </template>
-      <template #footer
-        ><Button @click="handleKickClose" value="추방하기" backgroundColor="#FC0E29"></Button
-      ></template>
+      <template #footer>
+        <Button
+          @click="handleKickClose"
+          value="추방하기"
+          backgroundColor="#FC0E29"
+          :disabled="selectedParticipantId === null"
+        />
+      </template>
+    </Modal>
+  </div>
+
+  <div>
+    <Modal v-if="showInviteModal" :header="modalHeader">
+      <template #body
+        ><InputField id="modal-input" placeholder="이메일을 입력해주세요." type="email"
+      /></template>
+      <template #footer><Button @click="handleInviteClose" value="초대하기"></Button></template>
     </Modal>
   </div>
 
