@@ -1,4 +1,4 @@
-export type TripSimple = {
+export interface Travel {
   id: number;
   name: string;
   destination: string;
@@ -7,6 +7,4 @@ export type TripSimple = {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-};
-
-export type TripSimpleList = TripSimple[];
+} 

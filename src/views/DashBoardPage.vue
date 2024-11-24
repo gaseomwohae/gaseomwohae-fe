@@ -5,49 +5,86 @@
   import { onMounted, computed } from 'vue';
   import NoneSelectTravel from '@/domain/common/components/NoneSelectTravel.vue';
   import { useRoute } from 'vue-router';
+  import { homeService } from '@/domain/home/service/home.service';
+  import { useTripInfoStore } from '@/stores/tripStore';
 
   const route = useRoute();
   const tripStore = useTripStore();
+  const tripInfoStore = useTripInfoStore();
 
-  // 특정 라우트 이름을 기준으로 컴포넌트 표시 여부 결정
   const isVisible = computed(() => {
     console.log('route.name', route.name);
-    return route.name === 'Home'; // 'desiredRouteName'을 원하는 라우트 이름으로 변경
+    return route.name === 'Home';
   });
-  console.log('isVisible', isVisible.value);
-  onMounted(() => {
-    // 예시: 초기 데이터를 설정
-    tripStore.setTripSimpleList([
-      {
-        id: 1,
-        name: '부산여행',
-      },
-      {
-        id: 2,
-        name: '서울여행',
-      },
-    ]);
-    tripStore.setSelectedTripId(null);
-    tripStore.setParticipantList([
-      {
-        id: 1,
-        name: '홍길동',
-        isActive: true,
-      },
-      {
-        id: 2,
-        name: '김길동',
-        isActive: false,
-      },
-      {
-        id: 3,
-        name: '이길동',
-        isActive: false,
-      },
-    ]);
+
+  onMounted(async () => {
+    try {
+      const response = await homeService.getTravelList();
+      const apiResponse = response.data;
+      
+      if (apiResponse.code === 200 && apiResponse.data) {
+        const travels = apiResponse.data;
+        
+        tripStore.setTripSimpleList(travels);
+        
+        if (travels.length > 0) {
+          const latestTravel = travels[0];
+          
+          const tripInfo = {
+            trip: latestTravel,
+            tripStartDate: latestTravel.startDate,
+            tripEndDate: latestTravel.endDate,
+            participants: [],
+            tripRoute: {
+              startDestination: {
+                id: 1,
+                name: '출발지',
+                latitude: 0,
+                longitude: 0,
+                imgSrc: ''
+              },
+              endDestination: {
+                id: 2,
+                name: latestTravel.destination,
+                latitude: 0,
+                longitude: 0,
+                imgSrc: ''
+              },
+              travelTime: '미정'
+            },
+            supplies: [],
+            accomodations: [],
+            localVisitors: [],
+            budget: 0
+          };
+          
+          tripInfoStore.setTripInfo(tripInfo);
+        }
+
+        tripStore.setParticipantList([
+          {
+            id: 1,
+            name: '홍길동',
+            isActive: true,
+          },
+          {
+            id: 2,
+            name: '김길동',
+            isActive: false,
+          },
+          {
+            id: 3,
+            name: '이길동',
+            isActive: false,
+          },
+        ]);
+      } else {
+        console.error('여행 정보를 가져오는데 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('API 호출 중 오류 발생:', error);
+    }
   });
-  // console.log(tripStore.tripSimpleList);
-  // console.log(tripStore.participantList);
 </script>
 
 <template>

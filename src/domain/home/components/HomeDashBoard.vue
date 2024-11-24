@@ -11,6 +11,8 @@
   import type { TripInfo } from '../model/tripInfo.type';
   import { SUPPLIES } from '@/domain/supply/constants/supplies';
   import type { SupplyCategory } from '@/domain/supply/components/model/supply.type';
+  import { homeService } from '../service/home.service';
+  import type { TripSimple } from '@/domain/common/model/TripSimple.type';
 
 
   import {
@@ -74,118 +76,8 @@
 });
 
   onMounted(() => {
-    const dummyTripInfo: TripInfo = {
-      trip: {
-        id: 1,
-        name: '제주도 여행',
-      },
-      tripStartDate: '2024-03-20',
-      tripEndDate: '2024-03-23',
-      participants: [
-        {
-          id: 1,
-          name: '김여행',
-          isActive: true
-    },
-    {
-      id: 2,
-      name: '이모험',
-      isActive: true
-    },
-    {
-      id: 3,
-      name: '박여행',
-      isActive: true
-    }
-  ],
-  tripRoute: {
-    startDestination: {
-      id: 1,
-      name: '김포공항',
-      latitude: 37.5586,
-      longitude: 126.7944,
-      imgSrc: 'gimpo-airport.jpg'
-    },
-    endDestination: {
-      id: 2,
-      name: '제주국제공항',
-      latitude: 33.5067,
-      longitude: 126.4927,
-      imgSrc: 'jeju-international-airport.jpg'
-    },
-    travelTime: '1시간 10분'
-  },
-  supplies: [
-    {
-      supply: getRandomItems('REQUIRED', 3),
-      category: 'REQUIRED'
-    },
-    {
-      supply: getRandomItems('ELECTRONIC', 3),
-      category: 'ELECTRONIC'
-    },
-    {
-      supply: getRandomItems('BEAUTY', 3),
-      category: 'BEAUTY'
-    },
-    {
-      supply: getRandomItems('CLOTHES', 3),
-      category: 'CLOTHES'
-    },
-    {
-      supply: getRandomItems('EMERGENCY', 3),
-      category: 'EMERGENCY'
-    },
-    {
-      supply: getRandomItems('ETC', 3),
-      category: 'ETC'
-    }
-  ],
-  accomodations: [
-    {
-      id: 3,
-      name: '제주 히든 클리프 호텔',
-      latitude: 33.4405,
-      longitude: 126.3947,
-      imgSrc: 'jeju-hidden-cliff-hotel.jpg'
-    },
-    {
-      id: 4,
-      name: '롯데호텔 제주',
-      latitude: 33.2482,
-      longitude: 126.4132,
-      imgSrc: 'lotte-hotel-jeju.jpg'
-    }
-  ],
-  localVisitors: [
-    {
-      name: '제주도 현지인 가이드',
-      visitorCount: 152,
-      destination: {
-        id: 1,
-        name: '김포공항',
-        latitude: 37.5586,
-        longitude: 126.7944,
-        imgSrc: 'gimpo-airport.jpg'
-      }
-    },
-    {
-      name: '제주 토박이 해녀',
-      visitorCount: 98,
-      destination: {
-        id: 2,
-        name: '제주국제공항',
-        latitude: 33.5067,
-        longitude: 126.4927,
-        imgSrc: 'jeju-international-airport.jpg'
-      }
-    }
-    ],
-    budget: 2000000
-    };
-    
-    // store에 더미데이터 설정
-    tripInfoStore.setTripInfo(dummyTripInfo);
+    // 차트 초기화 등 다른 필요한 초기화 작업만 수행
+    ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
   });
 
   const tripInfo = computed(() => tripInfoStore.tripInfo);
