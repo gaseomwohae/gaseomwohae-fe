@@ -2,8 +2,8 @@
   import HeaderDropDown from './HeaderDropDown.vue';
   import Participation from './Participation.vue';
   import { storeToRefs } from 'pinia';
-  
-  import { useTripInfoStore } from '@/stores/tripInfoStore';
+
+  import { useTripStore } from '@/stores/tripStore';
   const tripStore = useTripStore();
   const { tripSimpleList, selectedTripId, participantList } = storeToRefs(tripStore);
 </script>
