@@ -60,7 +60,7 @@ const handleSubmit = () => {
 
 <template>
   <div>
-    <Modal v-if="show" header="여행 정보 수정">
+    <Modal v-if="show" header="여행 정보 수정" @close="emit('close')">
       <template #body>
         <div class="edit-form">
           <InputField

@@ -1,42 +1,48 @@
 <!-- src/domain/home/components/Modal.vue -->
 <script setup lang="ts">
-  import { defineProps } from 'vue';
+  import { defineProps, defineEmits } from 'vue';
   const props = defineProps({
     header: String,
   });
+
+  const emit = defineEmits<{
+    close: [];
+  }>();
 </script>
 
 <template>
-  <transition name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-container">
-          <div class="modal-header-text">
-            {{ props.header }}
-          </div>
-          <slot name="body">Default Body</slot>
-          <slot name="footer">Default Footer</slot>
-        </div>
+  <div class="modal-background" @click.self="emit('close')">
+    <div class="modal-container">
+      <div class="modal-header">
+        <span class="modal-header-text">{{ header }}</span>
+        <img 
+          src="/src/assets/icons/modal_close.png" 
+          @click="emit('close')"
+          class="close-button"
+        />
+      </div>
+      <div class="modal-body">
+        <slot name="body"></slot>
+      </div>
+      <div class="modal-footer">
+        <slot name="footer"></slot>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <style scoped>
-  .modal-mask {
+  .modal-background {
     position: fixed;
-    z-index: 9998;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: table;
-    transition: opacity 0.3s ease;
-  }
-  .modal-wrapper {
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
   }
 
   .modal-container {
@@ -59,5 +65,20 @@
   .modal-header-text {
     font-size: 24px;
     font-weight: bold;
+  }
+
+  .close-button {
+    width: 30px;
+    height: 30px;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .close-button:hover {
+    cursor: pointer;
   }
 </style>

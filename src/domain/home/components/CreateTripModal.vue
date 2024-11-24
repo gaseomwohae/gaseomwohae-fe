@@ -79,12 +79,15 @@ const handleSubmit = () => {
   tripStore.createTrip(newTripInfo);
   acceptLottieRef.value?.showAnimation();
   emit('close');
+
+  
 };
 </script>
 
 <template>
   <div>
-    <Modal v-if="show" header="여행 계획하기">
+    <Modal v-if="show" header="여행 계획하기" @close="emit('close')">
+
       <template #body>
         <div class="edit-form">
           <InputField
@@ -120,7 +123,8 @@ const handleSubmit = () => {
           <Button value="생성" @click="handleSubmit" />
         </div>
       </template>
-    </Modal>
+
+    </Modal >
     
     <AcceptLottie 
       ref="acceptLottieRef"

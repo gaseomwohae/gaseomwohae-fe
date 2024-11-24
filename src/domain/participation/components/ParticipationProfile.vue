@@ -27,12 +27,12 @@
     class="participation-profile-layout" 
     :class="{ 
       'clickable': clickable, 
-      'selected': selected 
+
     }"
   >
     <img
       src="/src/assets/icons/profile.png"
-      :class="{ selected: isSelected, clickable: clickable }"
+      :class="{       'selected': selected , clickable: clickable }"
     />
     <div class="participation-profile-name">{{ props.participant?.name }}</div>
   </div>
@@ -63,8 +63,5 @@
     cursor: pointer; /* 클릭 가능할 때 커서 변경 */
   }
 
-  .selected {
-    border: 2px solid #FC0E29;
-    background-color: rgba(252, 14, 41, 0.1);
-  }
+
 </style>
