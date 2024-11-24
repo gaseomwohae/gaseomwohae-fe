@@ -17,6 +17,10 @@
       type: String,
       required: true,
     },
+    isCollapsed: {
+      type: Boolean,
+      default: false
+    }
   });
   const emit = defineEmits(['click']);
   console.log(props.src);
@@ -26,56 +30,61 @@
 </script>
 
 <template>
-  <button class="drawer-button" :class="{ active: isCurrentRoute }" @click="emit('click')">
+  <button 
+    class="drawer-button" 
+    :class="{ 
+      'active': isCurrentRoute,
+      'collapsed': isCollapsed 
+    }" 
+    @click="emit('click')"
+  >
     <img :src="`/src/assets/icons/${props.src}.png`" :alt="`${props.src}`" />
-    <span>{{ props.text }}</span>
+    <span v-show="!isCollapsed">{{ props.text }}</span>
   </button>
 </template>
 
 <style scoped>
-  .drawer-button {
-    width: 100%;
-    height: 40px;
-    border-radius: 10px;
-    padding: 10px 20px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
+.drawer-button {
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-  .drawer-button img,
-  .drawer-button span {
-    transition: opacity 0.3s ease;
-    opacity: 0.1;
-  }
+/* collapsed 상태일 때 중앙 정렬 */
+.drawer-button.collapsed {
+  justify-content: center;
+}
 
-  .drawer-button img,
-  .drawer-button span {
-    opacity: 1;
-  }
+.drawer-button img {
+  transition: all 0.3s ease;
+}
 
-  .drawer-button:hover {
-    background-color: #faf9ff;
-  }
+.drawer-button:hover {
+  background-color: #faf9ff;
+}
 
-  .drawer-button.active {
-    background-color: #faf9ff;
-  }
+.drawer-button.active {
+  background-color: #faf9ff;
+}
 
-  img {
-    width: 20px;
-    height: 20px;
-  }
+img {
+  width: 20px;
+  height: 20px;
+}
 
-  span {
-    font-family: 'NanumGothic';
-    font-size: 14px;
-    color: #000;
-    font-weight: bold;
-  }
+span {
+  font-family: 'NanumGothic';
+  font-size: 14px;
+  color: #000;
+  font-weight: bold;
+}
 </style>

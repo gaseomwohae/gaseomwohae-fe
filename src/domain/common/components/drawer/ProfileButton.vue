@@ -1,6 +1,11 @@
 <script setup lang="ts">
   import DropDownItem from '../DropDownItem.vue';
   import { ref } from 'vue';
+
+  defineProps<{
+    isCollapsed?: boolean;
+  }>();
+
   const isOpen = ref(false);
 
   const toggleDropdown = () => {
@@ -15,12 +20,16 @@
 
 <template>
   <div class="profile-button-container">
-    <button class="profile-button-layout profile-button profile-font" @click="toggleDropdown">
+    <button 
+      class="profile-button-layout profile-button profile-font" 
+      :class="{ 'collapsed': isCollapsed }"
+      @click="toggleDropdown"
+    >
       <div class="profile-layout">
         <img src="/src/assets/icons/profile.png" alt="profile" class="profile-layout" />
         <div class="profile-badge"></div>
       </div>
-      <span>프로필</span>
+      <span v-show="!isCollapsed">프로필</span>
     </button>
     <transition name="fade">
       <div v-show="isOpen" class="drop-down-item-container">
@@ -79,6 +88,11 @@
     align-items: center;
     padding: 10px;
     gap: 10px;
+    transition: all 0.3s ease;
+  }
+
+  .profile-button-layout.collapsed {
+    justify-content: center;
   }
 
   .profile-button {
