@@ -3,7 +3,7 @@ import type { LoginRequest, SignUpRequest } from '../model/auth.type';
 
 class AuthService {
   async signUp(signUpRequest: SignUpRequest) {
-    const response = await axiosInstance.post('/api/auth/signup', signUpRequest);
+    const response = await axiosInstance.post('/api/user/signup', signUpRequest);
     return response;
   }
 

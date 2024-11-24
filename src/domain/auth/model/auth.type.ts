@@ -1,9 +1,12 @@
-export type SignUpRequest = {
+export type SignUpForm = {
   email: string;
   name: string;
   password: string;
   passwordConfirm: string;
+  profileImage: string;
 };
+
+export type SignUpRequest = Omit<SignUpForm, 'passwordConfirm'>;
 
 export type LoginRequest = {
   email: string;

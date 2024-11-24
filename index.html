@@ -1,46 +1,26 @@
 <!doctype html>
 <html lang="">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <!-- TODO: favicon 변경하기 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>가서뭐해?</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <!-- TODO: favicon 변경하기 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>가서뭐해?</title>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script
-  type="text/javascript"
-  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=46b99b5a41d376c32bafb4625e59a55d&libraries=services"
-></script>
+<script type="text/javascript"
+  src="//dapi.kakao.com/v2/maps/sdk.js?appkey=46b99b5a41d376c32bafb4625e59a55d&libraries=services"></script>
 
 <script>
-  const ctx = document.getElementById('myChart');
 
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [
-        {
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
 </script>

@@ -2,14 +2,21 @@
   import Logo from '@/domain/common/components/Logo.vue';
   import { ref } from 'vue';
   import Button from '../../common/components/Button.vue';
-  import type { SignUpRequest } from '../model/auth.type';
+  import type { SignUpForm } from '../model/auth.type';
   import { authService } from '../service/AuthService';
   import InputField from './InputField.vue';
 
-  const signUpForm = ref<SignUpRequest>({ email: '', name: '', password: '', passwordConfirm: '' });
+  const signUpForm = ref<SignUpForm>({
+    email: '',
+    name: '',
+    password: '',
+    passwordConfirm: '',
+    profileImage: ''
+  });
 
   const signUpHandler = async () => {
-    await authService.signUp(signUpForm.value);
+    const { passwordConfirm, ...signUpRequest } = signUpForm.value;
+    await authService.signUp(signUpRequest);
   };
 </script>
 
