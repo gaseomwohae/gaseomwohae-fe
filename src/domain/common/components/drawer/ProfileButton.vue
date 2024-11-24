@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import DropDownItem from '../DropDownItem.vue';
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
 
   defineProps<{
     isCollapsed?: boolean;
@@ -8,12 +9,19 @@
 
   const isOpen = ref(false);
 
+  const router = useRouter();
+
   const toggleDropdown = () => {
     console.log('onToggleDropDown', !isOpen.value);
     isOpen.value = !isOpen.value;
   };
 
   const onSelectItem = () => {
+    isOpen.value = false;
+  };
+
+  const navigateToMyPage = () => {
+    router.push({ name: 'MyPage' });
     isOpen.value = false;
   };
 </script>
@@ -33,7 +41,7 @@
     </button>
     <transition name="fade">
       <div v-show="isOpen" class="drop-down-item-container">
-        <DropDownItem text="내 정보" @selectItem="onSelectItem" />
+        <DropDownItem text="내 정보" @selectItem="navigateToMyPage" />
         <DropDownItem text="로그아웃" @selectItem="onSelectItem" />
       </div>
     </transition>

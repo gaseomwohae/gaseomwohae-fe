@@ -8,6 +8,7 @@ import SchedulePage from '../domain/travel/components/SchedulePage.vue';
 import { useAuthStore } from '../stores/auth';
 import AuthPage from '../views/AuthPage.vue';
 import DashBoardPage from '../views/DashBoardPage.vue';
+import MyPage from '@/domain/user/components/MyPage.vue';
 
 const routes = [
   {
@@ -38,6 +39,12 @@ const routes = [
         name: 'Participants',
         component: ParticipationDashBoard,
         // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+      },
+      {
+        path: 'mypage',
+        name: 'MyPage',
+        component: MyPage,
+        // meta: { requiresAuth: true },
       },
     ],
   },
