@@ -8,5 +8,10 @@
     font-weight: black;
     font-family: 'CookieRun';
     color: #346aff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    width: 100%;
   }
 </style>
