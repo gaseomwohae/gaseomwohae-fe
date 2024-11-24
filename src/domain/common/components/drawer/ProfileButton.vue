@@ -2,6 +2,7 @@
   import DropDownItem from '../DropDownItem.vue';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
+  import { useAuthStore } from '@/stores/auth';
 
   defineProps<{
     isCollapsed?: boolean;
@@ -10,19 +11,22 @@
   const isOpen = ref(false);
 
   const router = useRouter();
+  const authStore = useAuthStore();
 
   const toggleDropdown = () => {
     console.log('onToggleDropDown', !isOpen.value);
     isOpen.value = !isOpen.value;
   };
 
-  const onSelectItem = () => {
-    isOpen.value = false;
-  };
-
   const navigateToMyPage = () => {
     router.push({ name: 'MyPage' });
     isOpen.value = false;
+  };
+
+  const handleLogout = () => {
+    authStore.logout();
+    isOpen.value = false;
+    router.replace({ name: 'Login' });
   };
 </script>
 
@@ -42,7 +46,7 @@
     <transition name="fade">
       <div v-show="isOpen" class="drop-down-item-container">
         <DropDownItem text="내 정보" @selectItem="navigateToMyPage" />
-        <DropDownItem text="로그아웃" @selectItem="onSelectItem" />
+        <DropDownItem text="로그아웃" @selectItem="handleLogout" />
       </div>
     </transition>
   </div>

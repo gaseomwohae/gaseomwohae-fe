@@ -1,10 +1,15 @@
 <script setup lang="ts">
   import Logo from '@/domain/common/components/Logo.vue';
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
   import Button from '../../common/components/Button.vue';
   import type { SignUpForm } from '../model/auth.type';
   import { authService } from '../service/AuthService';
   import InputField from './InputField.vue';
+  import type { ApiResponse } from '@/domain/common/model/response.type';
+
+  const router = useRouter();
+  const errorMessage = ref<string>('');
 
   const signUpForm = ref<SignUpForm>({
     email: '',
@@ -15,8 +20,27 @@
   });
 
   const signUpHandler = async () => {
-    const { passwordConfirm, ...signUpRequest } = signUpForm.value;
-    await authService.signUp(signUpRequest);
+    try {
+      // 비밀번호 확인 검증
+      if (signUpForm.value.password !== signUpForm.value.passwordConfirm) {
+        errorMessage.value = '비밀번호가 일치하지 않습니다.';
+        return;
+      }
+
+      const { passwordConfirm, ...signUpRequest } = signUpForm.value;
+      const response = await authService.signUp(signUpRequest);
+      const apiResponse = response.data as ApiResponse<null>;
+
+      if (apiResponse.code === 200) {
+        // 회원가입 성공 시 로그인 페이지로 이동
+        router.replace({ name: 'Login' });
+      } else {
+        errorMessage.value = apiResponse.message || '회원가입에 실패했습니다.';
+      }
+    } catch (error) {
+      console.error(error);
+      errorMessage.value = '회원가입 처리 중 오류가 발생했습니다.';
+    }
   };
 </script>
 
@@ -55,6 +79,11 @@
       v-model="signUpForm.passwordConfirm"
     />
 
+    <!-- 에러 메시지 표시 -->
+    <div v-if="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
     <Button value="회원가입" @click="signUpHandler" />
   </div>
 </template>
@@ -69,8 +98,10 @@
   }
 
   .error-message {
-    color: red;
-    font-size: 12px;
+    color: #ff4444;
+    font-size: 14px;
+    margin-top: 8px;
+    text-align: center;
   }
 
   .auth-header-font {

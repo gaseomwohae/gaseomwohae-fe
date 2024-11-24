@@ -1,4 +1,5 @@
 import axiosInstance from '@/domain/common/util/axios';
+import type { ApiResponse } from '@/domain/common/model/response.type';
 import type { LoginRequest, SignUpRequest } from '../model/auth.type';
 
 class AuthService {
@@ -8,8 +9,7 @@ class AuthService {
   }
 
   async login(loginRequest: LoginRequest) {
-    const response = await axiosInstance.post('/api/auth/login', loginRequest);
-    return response;
+    return await axiosInstance.post<ApiResponse<null>>('/api/auth/login', loginRequest);
   }
 }
 

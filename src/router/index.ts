@@ -15,7 +15,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: DashBoardPage,
-    // meta: { requiresAuth: true }, // 인증이 필요한 라우트
+    meta: { requiresAuth: true }, // 인증이 필요한 라우트
     children: [
       {
         path: 'travel/:id',
@@ -44,7 +44,7 @@ const routes = [
         path: 'mypage',
         name: 'MyPage',
         component: MyPage,
-        // meta: { requiresAuth: true },
+        meta: { requiresAuth: true },
       },
     ],
   },
