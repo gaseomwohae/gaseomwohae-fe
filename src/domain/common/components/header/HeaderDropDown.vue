@@ -2,7 +2,7 @@
 import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
 import CreateTripModal from '@/domain/home/components/CreateTripModal.vue';
 import AcceptLottie from '../AcceptLottie.vue';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useTripStore } from '@/stores/tripStore';
 import { storeToRefs } from 'pinia';
 import { useRouter, useRoute } from 'vue-router';
@@ -11,6 +11,7 @@ const tripStore = useTripStore();
 const { tripSimpleList, selectedTripId } = storeToRefs(tripStore);
 const router = useRouter();
 const route = useRoute();
+const isInTravelPath = computed(() => route.path.startsWith('/travel'));
 
 const isOpen = ref(false);
 const showCreateModal = ref(false);
@@ -91,7 +92,7 @@ onMounted(async () => {
   <div class="header-drop-down-layout">
     <div class="header-drop-down-text-container" @click="onToggleDropDown">
       <span class="header-drop-down-text">{{
-        selectedTripId
+        isInTravelPath && selectedTripId
           ? tripSimpleList.find((trip) => trip.id === selectedTripId)?.name
           : '여행 선택'
       }}</span>

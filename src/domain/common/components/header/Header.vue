@@ -2,10 +2,16 @@
   import HeaderDropDown from './HeaderDropDown.vue';
   import Participation from './Participation.vue';
   import { storeToRefs } from 'pinia';
+  import { computed } from 'vue';
+  import { useRoute } from 'vue-router';
 
   import { useTripStore } from '@/stores/tripStore';
+  const route = useRoute();
   const tripStore = useTripStore();
   const { tripSimpleList, selectedTripId, participantList } = storeToRefs(tripStore);
+
+  // 현재 경로가 /travel로 시작하는지 확인
+  const isInTravelPath = computed(() => route.path.startsWith('/travel'));
 </script>
 <template>
   <div class="header-layout">
@@ -13,7 +19,10 @@
       :trip-simple-list="tripSimpleList"
       :selected-trip-id="selectedTripId"
     />
-    <Participation :participant-list="participantList" />
+    <Participation 
+      v-if="isInTravelPath"
+      :participant-list="participantList" 
+    />
   </div>
 </template>
 <style scoped>

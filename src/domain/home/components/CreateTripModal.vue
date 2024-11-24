@@ -80,7 +80,7 @@ const handleSubmit = () => {
   acceptLottieRef.value?.showAnimation();
   emit('close');
 
-  
+
 };
 </script>
 
@@ -119,7 +119,7 @@ const handleSubmit = () => {
       
       <template #footer>
         <div class="modal-footer">
-          <Button value="취소" @click="emit('close')" backgroundColor="#f5f5f5" color="#333" />
+          <Button value="취소" @click="emit('close')" backgroundColor="#f5f5f5" color="#000" />
           <Button value="생성" @click="handleSubmit" />
         </div>
       </template>

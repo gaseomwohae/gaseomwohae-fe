@@ -3,6 +3,7 @@ import { ref, computed } from 'vue';
 import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
 import { storeToRefs } from 'pinia';
 import { useTripStore } from '@/stores/tripStore';
+import type { InviteInfo } from '../types/inviteInfo.type';
 
 const tripStore = useTripStore();
 const { tripSimpleList } = storeToRefs(tripStore);
@@ -27,9 +28,10 @@ const editingInfo = ref({
 });
 
 // 초대받은 여행 리스트 데이터
-const invitedTrips = ref([
+const invitedTrips = ref<InviteInfo[]>([
   {
     id: 1,
+    tripId: 101,
     tripName: '제주도 여행',
     inviter: '김철수',
     inviteDate: '2024-03-15',
@@ -37,6 +39,7 @@ const invitedTrips = ref([
   },
   {
     id: 2,
+    tripId: 102,
     tripName: '부산 여행',
     inviter: '이영희',
     inviteDate: '2024-03-14',
@@ -75,23 +78,23 @@ const handleCancel = () => {
   isEditing.value = false;
 };
 
-const handleAcceptInvite = async (tripId: number) => {
-  const acceptedTrip = invitedTrips.value.find(trip => trip.id === tripId);
+const handleAcceptInvite = async (inviteId: number) => {
+  const acceptedTrip = invitedTrips.value.find(trip => trip.id === inviteId);
   
   if (acceptedTrip) {
     // Lottie 애니메이션 표시
     acceptLottieRef.value?.showAnimation();
     
-    // tripStore에 새로운 여행 추가
+    // tripStore에 새로운 여행 추가 (tripId 사용)
     tripStore.setTripSimpleList([
       ...tripSimpleList.value,
       {
-        id: acceptedTrip.id,
+        id: acceptedTrip.tripId,  // tripId 사용
         name: acceptedTrip.tripName
       }
     ]);
     // 초대 리스트에서 제거
-    invitedTrips.value = invitedTrips.value.filter(trip => trip.id !== tripId);
+    invitedTrips.value = invitedTrips.value.filter(trip => trip.id !== inviteId);
     
 
   }
