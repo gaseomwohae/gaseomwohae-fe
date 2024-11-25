@@ -6,9 +6,6 @@
   // const participantList = tripStore.participantList;
   const tripSimpleList = tripStore.tripSimpleList;
   const participantList = computed(() => tripStore.participantList);
-  console.log('tripStore', tripStore);
-  console.log(tripSimpleList);
-  console.log(participantList);
 </script>
 
 <template>

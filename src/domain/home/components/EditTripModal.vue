@@ -1,61 +1,68 @@
 <script setup lang="ts">
-import Modal from './Modal.vue';
-import InputField from '@/domain/auth/components/InputField.vue';
-import Button from '@/domain/common/components/Button.vue';
-import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
-import { ref, watch, computed } from 'vue';
-import { useTripInfoStore } from '@/stores/tripStore';
+  import Modal from './Modal.vue';
+  import InputField from '@/domain/auth/components/InputField.vue';
+  import Button from '@/domain/common/components/Button.vue';
+  import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
+  import { ref, watch, computed } from 'vue';
+  import { useTripInfoStore } from '@/stores/tripStore';
+  import { homeService } from '@/domain/home/service/home.service';
 
-const props = defineProps<{
-  show: boolean;
-}>();
+  const props = defineProps<{
+    show: boolean;
+  }>();
 
-const emit = defineEmits(['close', 'update']);
+  const emit = defineEmits(['close', 'update']);
 
-const tripStore = useTripInfoStore();
+  const tripStore = useTripInfoStore();
 
-// computed로 tripInfo 변화 감지
-const currentTripInfo = computed(() => tripStore.tripInfo);
+  // computed로 tripInfo 변화 감지
+  const currentTripInfo = computed(() => tripStore.tripInfo);
 
-const acceptLottieRef = ref<InstanceType<typeof AcceptLottie> | null>(null);
+  const acceptLottieRef = ref<InstanceType<typeof AcceptLottie> | null>(null);
 
-const formData = ref({
-  startDate: '',
-  endDate: '',
-  destination: ''
-});
+  const formData = ref({
+    name: '',
+    startDate: '',
+    endDate: '',
+    destination: '',
+  });
 
-// tripInfo가 변경될 때마다 formData 업데이트
-watch(currentTripInfo, (newTripInfo) => {
-  if (newTripInfo) {
-    formData.value = {
-      startDate: newTripInfo.tripStartDate,
-      endDate: newTripInfo.tripEndDate,
-      destination: newTripInfo.tripRoute.endDestination.name
-    };
-  }
-}, { immediate: true });
-
-const handleSubmit = () => {
-  if (!currentTripInfo.value) return;
-
-  const updatedTripInfo = {
-    ...currentTripInfo.value,
-    tripStartDate: formData.value.startDate,
-    tripEndDate: formData.value.endDate,
-    tripRoute: {
-      ...currentTripInfo.value.tripRoute,
-      endDestination: {
-        ...currentTripInfo.value.tripRoute.endDestination,
-        name: formData.value.destination
+  // tripInfo가 변경될 때마다 formData 업데이트
+  watch(
+    currentTripInfo,
+    (newTripInfo) => {
+      if (newTripInfo) {
+        formData.value = {
+          name: newTripInfo.trip.name,
+          startDate: newTripInfo.tripStartDate,
+          endDate: newTripInfo.tripEndDate,
+          destination: newTripInfo.tripRoute.endDestination.name,
+        };
       }
+    },
+    { immediate: true },
+  );
+
+  const handleSubmit = async () => {
+    if (!currentTripInfo.value) return;
+
+    const travelId = currentTripInfo.value.trip.id;
+    const tripRequest = {
+      name: formData.value.name,
+      destination: formData.value.destination,
+      startDate: formData.value.startDate,
+      endDate: formData.value.endDate,
+    };
+
+    try {
+      await homeService.updateTrip(travelId, tripRequest);
+      console.log('Trip updated successfully');
+      acceptLottieRef.value?.showAnimation();
+      emit('close');
+    } catch (error) {
+      console.error('Failed to update trip:', error);
     }
   };
-
-  tripStore.updateTripInfo(updatedTripInfo);
-  acceptLottieRef.value?.showAnimation();
-  emit('close');
-};
 </script>
 
 <template>
@@ -63,6 +70,13 @@ const handleSubmit = () => {
     <Modal v-if="show" header="여행 정보 수정" @close="emit('close')">
       <template #body>
         <div class="edit-form">
+          <InputField
+            type="text"
+            id="name"
+            label="여행 이름"
+            v-model="formData.name"
+            placeholder="여행 이름"
+          />
           <InputField
             type="date"
             id="startDate"
@@ -86,7 +100,7 @@ const handleSubmit = () => {
           />
         </div>
       </template>
-      
+
       <template #footer>
         <div class="modal-footer">
           <Button value="취소" @click="emit('close')" backgroundColor="#f5f5f5" fontColor="#000" />
@@ -94,25 +108,22 @@ const handleSubmit = () => {
         </div>
       </template>
     </Modal>
-    
-    <AcceptLottie 
-      ref="acceptLottieRef"
-      title="여행 정보가 수정되었습니다"
-    />
+
+    <AcceptLottie ref="acceptLottieRef" title="여행 정보가 수정되었습니다" />
   </div>
 </template>
 
 <style scoped>
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 400px;
-}
+  .edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 400px;
+  }
 
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-}
-</style> 
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+</style>

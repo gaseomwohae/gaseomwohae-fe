@@ -2,7 +2,7 @@
   import DropDownItem from '../DropDownItem.vue';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { useAuthStore } from '@/stores/auth';
+  import { userService } from '@/domain/user/service/user.service';
 
   defineProps<{
     isCollapsed?: boolean;
@@ -11,7 +11,6 @@
   const isOpen = ref(false);
 
   const router = useRouter();
-  const authStore = useAuthStore();
 
   const toggleDropdown = () => {
     console.log('onToggleDropDown', !isOpen.value);
@@ -23,8 +22,8 @@
     isOpen.value = false;
   };
 
-  const handleLogout = () => {
-    authStore.logout();
+  const handleLogout = async () => {
+    await userService.logout();
     isOpen.value = false;
     router.replace({ name: 'Login' });
   };
@@ -32,9 +31,9 @@
 
 <template>
   <div class="profile-button-container">
-    <button 
-      class="profile-button-layout profile-button profile-font" 
-      :class="{ 'collapsed': isCollapsed }"
+    <button
+      class="profile-button-layout profile-button profile-font"
+      :class="{ collapsed: isCollapsed }"
       @click="toggleDropdown"
     >
       <div class="profile-layout">

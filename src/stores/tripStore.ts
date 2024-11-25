@@ -41,9 +41,8 @@ export const useTripInfoStore = defineStore('tripInfo', {
     },
 
     // 새로운 createTrip 메서드 추가
-    createTrip(newTripInfo: TripInfo) {
-      this.tripInfo = newTripInfo;
-      this.selectedTripId = newTripInfo.trip.id;
+    createTrip() {
+      
     },
 
     setSelectedTripId(id: number) {
