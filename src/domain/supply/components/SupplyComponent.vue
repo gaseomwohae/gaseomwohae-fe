@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import SupplyCard from './SupplyCard.vue';
   import type { SupplyItem } from './model/supply.type';
-  const props = defineProps<{ 
-    supplies: SupplyItem[]; 
+  const props = defineProps<{
+    supplies: SupplyItem[];
     backgroundColor: string;
   }>();
 </script>
@@ -10,9 +10,8 @@
 <template>
   <div class="supply-component-outside-layout" :style="{ backgroundColor: props.backgroundColor }">
     <slot name="header"></slot>
-
     <div class="supply-component-layout">
-      <SupplyCard v-for="supply in props.supplies" :supply="supply" :key="supply.name" />
+      <SupplyCard v-for="supply in props.supplies" :supply="supply" :key="supply.id" />
     </div>
   </div>
 </template>

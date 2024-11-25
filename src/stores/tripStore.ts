@@ -4,6 +4,7 @@ import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
 import type { TripInfo } from '@/domain/home/model/tripInfo.type';
 import type { Participant } from '@/domain/common/model/Participant.type';
 import type { Schedule } from '@/domain/travel/model/travel.type';
+import type { SupplyItem } from '@/domain/supply/components/model/supply.type';
 export const useTripStore = defineStore('tripStore', {
   state: () => ({
     tripSimpleList: [] as TripSimpleList,
@@ -57,6 +58,19 @@ export const useTripInfoStore = defineStore('tripInfo', {
         this.tripInfo.schedules = [...newSchedules];
       }
     },
+
+        // supplies 업데이트 메서드 추가
+        updateSupplies(supplyItem: SupplyItem, action: 'add' | 'remove') {
+          if (this.tripInfo) {
+            const category = supplyItem.category;
+              const supplies = this.tripInfo.supplies[category] || [];
+
+        if (action === 'add') {
+          this.tripInfo.supplies[category] = [...supplies, supplyItem];
+        } else if (action === 'remove') {
+              this.tripInfo.supplies[category] = supplies.filter(item => item.id !== supplyItem.id);
+            }
+      }
+    },
   },
-  
 });

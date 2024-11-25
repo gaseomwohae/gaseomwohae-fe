@@ -65,7 +65,7 @@
 
   .category-title {
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     padding-bottom: 8px;
     border-bottom: 1px solid #eee;
   }
@@ -73,7 +73,7 @@
   .category-items {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 16px;
     padding-left: 8px;
   }
 </style>
