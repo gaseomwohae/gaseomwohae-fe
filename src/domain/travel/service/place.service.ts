@@ -17,7 +17,13 @@ class PlaceService {
         console.error('Failed to create place:', apiResponse.message);
       }
       return apiResponse;
-    } catch (error) {
+    } catch (error: any) {
+      // 에러 응답이 있고, 'Resource already exists' 메시지인 경우
+      if (error.response?.data?.message === 'Resource already exists') {
+        console.log('Place already exists, skipping error');
+        return error.response.data;
+      }
+      
       console.error('Error occurred while creating place:', error);
       throw error;
     }

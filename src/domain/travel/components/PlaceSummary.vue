@@ -1,7 +1,7 @@
 <template>
   <div v-if="place">
     <div class="place-card" @click="selectPlace">
-      <img :src="place.imgUrl" alt="place" />
+      <img :src="place.thumbnail" alt="place" />
       <div class="place-card__info">
         <div class="place-card__header">
           <div class="place-card__category font-caption">{{ place.category }}</div>

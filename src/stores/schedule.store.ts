@@ -10,13 +10,13 @@ export const useScheduleStore = defineStore('schedule', () => {
   const draggingSchedule = ref<Schedule | null>(null);
   const draggingScheduleDuration = ref(0);
 
-  const updateSchedule = (newSchedule: Schedule) => {
-    scheduleList.value = scheduleList.value.map((s) =>
-      s.scheduleId === newSchedule.scheduleId ? newSchedule : s,
+  const updateSchedule = async (newSchedule: Schedule) => {
+    await scheduleService.updateSchedule(
+      newSchedule.scheduleId, 
+      newSchedule.startTime, 
+      newSchedule.endTime,
+      newSchedule  // 전체 스케줄 객체 전달
     );
-    console.log(scheduleList.value);
-    // TODO: 서버로 전송
-    scheduleService.updateSchedule(newSchedule.scheduleId, newSchedule.startTime, newSchedule.endTime);
   };
 
   const setScheduleList = (newScheduleList: Schedule[]) => {
@@ -24,10 +24,8 @@ export const useScheduleStore = defineStore('schedule', () => {
   };
 
 
-  const deleteSchedule = (id: number) => {
-    scheduleList.value = scheduleList.value.filter((s) => s.scheduleId !== id);
-    // TODO: 서버에서 삭제
-    scheduleService.deleteSchedule(id);
+  const deleteSchedule = async (id: number) => {
+    await scheduleService.deleteSchedule(id);
   };
 
   const setDraggingSchedule = (schedule: Schedule) => {
@@ -41,13 +39,18 @@ export const useScheduleStore = defineStore('schedule', () => {
     draggingScheduleDuration.value = 30;
   };
 
-  const addSchedule = (schedule: Schedule) => {
-    // TODO: 서버에 추가 id값 받아와서 추가해야함
+  const addSchedule = async (schedule: Schedule) => {
     const tripInfoStore = useTripInfoStore();
     if (tripInfoStore.tripInfo) {
-      scheduleService.addSchedule(tripInfoStore.tripInfo.trip.id, schedule.place.id, schedule.date, schedule.startTime, schedule.endTime);
+      await scheduleService.addSchedule(
+        tripInfoStore.tripInfo.trip.id, 
+        schedule.place.id, 
+        schedule.date, 
+        schedule.startTime, 
+        schedule.endTime,
+        schedule  // 전체 스케줄 객체 전달
+      );
     }
-    scheduleList.value.push({ ...schedule, scheduleId: new Date().getTime() });
   };
 
   return {

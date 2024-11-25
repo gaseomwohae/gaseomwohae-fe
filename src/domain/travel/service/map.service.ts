@@ -47,10 +47,9 @@ class MapService {
         category: place.category_name.split(' > ').slice(0, 2).join(' > '),
         phone: place.phone,
         url: place.place_url,
-        imgUrl: await PlaceService.getPlaceImage(place.place_name),
-        x: place.x,
-        y: place.y,
-        reviewRate: 0,
+        thumbnail: await PlaceService.getPlaceImage(place.place_name),
+        x: Number(place.x),
+        y: Number(place.y),
       })),
     );
 

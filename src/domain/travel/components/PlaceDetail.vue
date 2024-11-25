@@ -8,13 +8,15 @@
             name: placeDetail.name,
             address: placeDetail.address,
             category: placeDetail.category,
-            imgUrl: placeDetail.imgUrl,
-            reviewRate: placeDetail.reviewRate,
+            thumbnail: placeDetail.thumbnail,
             roadAddress: placeDetail.roadAddress,
             phone: placeDetail.phone,
             url: placeDetail.url,
             x: placeDetail.x,
             y: placeDetail.y,
+            createdAt: placeDetail.createdAt,
+            updatedAt: placeDetail.updatedAt,
+            deletedAt: placeDetail.deletedAt,
           }"
         />
       </div>
