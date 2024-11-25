@@ -39,20 +39,21 @@ class MapService {
     );
 
     return Promise.all(
-      searchResult.map(async (store) => ({
-        id: store.id,
-        name: store.place_name,
-        address: store.address_name,
-        roadAddress: store.road_address_name,
-        category: store.category_name.split(' > ').slice(0, 2).join(' > '),
-        phone: store.phone,
-        url: store.place_url,
-        imgUrl: await PlaceService.getPlaceImage(store.place_name),
-        x: store.x,
-        y: store.y,
+      searchResult.map(async (place) => ({
+        id: Number(place.id),
+        name: place.place_name,
+        address: place.address_name,
+        roadAddress: place.road_address_name,
+        category: place.category_name.split(' > ').slice(0, 2).join(' > '),
+        phone: place.phone,
+        url: place.place_url,
+        imgUrl: await PlaceService.getPlaceImage(place.place_name),
+        x: place.x,
+        y: place.y,
         reviewRate: 0,
       })),
     );
+
   }
 
   displayMarker(map: kakao.maps.Map, place: kakao.maps.services.PlacesSearchResultItem) {

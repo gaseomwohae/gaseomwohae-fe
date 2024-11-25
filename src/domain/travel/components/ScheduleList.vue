@@ -50,7 +50,6 @@
   import TimeSlot from './TimeSlot.vue';
   import { useTripInfoStore } from '@/stores/tripStore';
 
-  const travelStore = useTravelStore();
   const scheduleStore = useScheduleStore();
   const tripInfoStore = useTripInfoStore();
 

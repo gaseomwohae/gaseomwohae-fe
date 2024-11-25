@@ -17,6 +17,7 @@
   import { useMapStore } from '@/stores/map.store';
   import { usePlaceStore } from '@/stores/place.store';
   import { computed, ref } from 'vue';
+  import placeService from '@/domain/travel/service/place.service';
 
   const searchValue = ref<string>('');
   const placeStore = usePlaceStore();
@@ -29,6 +30,9 @@
     const places: Place[] = await mapService.searchPlaces(map.value, searchValue.value);
     for (const place of places) {
       console.log(place.name);
+    }
+    for (const place of places) {
+      await placeService.createPlace(place);
     }
 
     placeStore.updateSearchedPlaces(places);
