@@ -7,7 +7,7 @@
           <TimeSlot :time="time" />
         </div>
         <div class="schedule-blocks">
-          <div v-for="schedule in scheduleList" :key="schedule.id">
+          <div v-for="schedule in scheduleList" :key="schedule.scheduleId">
             <ScheduleBlock
               :schedule="schedule"
               @update-start-time="updateTime"
@@ -18,7 +18,7 @@
               :style="{
                 top: `calc(${(timeToMinutes(schedule.startTime) / 30) * 8}rem + 0.5rem)`,
               }"
-              @click="deleteSchedule(schedule.id)"
+              @click="deleteSchedule(schedule.scheduleId)"
             >
               x
             </div>
@@ -43,7 +43,7 @@
 <script setup lang="ts">
   import { useScheduleStore } from '@/stores/schedule.store';
   import { useTravelStore } from '@/stores/travel.store';
-  import { computed, onMounted, ref } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import type { Schedule } from '../model/travel.type';
   import { minutesToTime, remToPx, TIME_SLOTS, timeToMinutes } from '../utils/time.util';
   import ScheduleBlock from './ScheduleBlock.vue';
@@ -56,7 +56,10 @@
 
   const scheduleDate = computed(() => tripInfoStore.tripInfo?.trip.startDate ?? '');
   const scheduleList = computed(() => scheduleStore.scheduleList);
-
+  // scheduleList의 변화를 감지하여 콘솔에 출력
+  watch(scheduleList, (newScheduleList) => {
+    console.log('Updated schedule list:', newScheduleList);
+  });
   // Constants
   const MINUTES_PER_SLOT = 30;
   const SLOT_HEIGHT = remToPx(8);
@@ -71,19 +74,17 @@
 
   onMounted(async () => {
     //Todo: 적당한 위치로 옮기기 새로고침마다 초기화됨.
-    await travelStore.fetchTravelList();
-    await scheduleStore.fetchScheduleList();
   });
 
   // 스케줄 시간 업데이트
   const updateTime = (updatedSchedule: Schedule) => {
     const targetSchedule = scheduleList.value.find(
-      (schedule) => schedule.id === updatedSchedule.id,
+      (schedule) => schedule.scheduleId === updatedSchedule.scheduleId,
     );
 
     if (
       !targetSchedule ||
-      checkOverlap(updatedSchedule.id, updatedSchedule.startTime, updatedSchedule.endTime)
+      checkOverlap(updatedSchedule.scheduleId, updatedSchedule.startTime, updatedSchedule.endTime)
     ) {
       return false;
     }
@@ -101,7 +102,7 @@
     const newEnd = timeToMinutes(endTime);
 
     return scheduleList.value.some((s) => {
-      if (id === s.id) {
+      if (id === s.scheduleId) {
         return false;
       }
 
@@ -147,7 +148,7 @@
 
     // 겹침 여부 확인
     isOverlapping.value = checkOverlap(
-      draggingSchedule.value?.id ?? 0,
+      draggingSchedule.value?.scheduleId ?? 0,
       dragOverTime.value,
       minutesToTime(timeToMinutes(dragOverTime.value) + draggingScheduleDuration.value ?? 0),
     );
@@ -160,7 +161,7 @@
   };
 
   const moveSchedule = (id: number, newStartTime: string) => {
-    const schedule = scheduleList.value.find((s) => s.id === id);
+    const schedule = scheduleList.value.find((s) => s.scheduleId === id);
     if (!schedule) {
       console.log('Schedule not found');
       return false;
@@ -192,8 +193,8 @@
     if (!e.dataTransfer || !draggingSchedule.value) return;
 
     // 기존 스케줄을 움직이는거라면
-    if (draggingSchedule.value?.id) {
-      moveSchedule(draggingSchedule.value.id, dragOverTime.value);
+    if (draggingSchedule.value?.scheduleId) {
+      moveSchedule(draggingSchedule.value.scheduleId, dragOverTime.value);
       scheduleStore.deleteDraggingSchedule();
     }
 
@@ -203,7 +204,7 @@
       const endTimeMinutes = timeToMinutes(startTime) + MINUTES_PER_SLOT;
       const endTime = minutesToTime(endTimeMinutes);
       const newSchedule: Schedule = {
-        id: 0,
+        scheduleId: 0,
         startTime,
         endTime,
         place: draggingSchedule.value.place,
@@ -211,12 +212,17 @@
       };
 
       // 겹치지 않을 경우에만 추가
-      if (!checkOverlap(newSchedule.id, startTime, endTime)) {
+      if (!checkOverlap(newSchedule.scheduleId, startTime, endTime)) {
         scheduleStore.addSchedule(newSchedule);
         scheduleStore.deleteDraggingSchedule();
       }
     }
   };
+
+  // scheduleList의 변화를 감지하여 콘솔에 출력
+  watch(scheduleList, (newScheduleList) => {
+    console.log('Updated schedule list:', newScheduleList);
+  });
 </script>
 
 <style scoped>

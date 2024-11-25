@@ -1,16 +1,10 @@
 import type { User } from '@/domain/auth/model/auth.type';
 
-
 export interface Schedule {
-  id: number;
-  travelId: number;
-  placeId: number;
+  scheduleId: number;
   date: string;
   startTime: string;
   endTime: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
   place: Place;
 }
 
