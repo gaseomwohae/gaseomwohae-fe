@@ -50,7 +50,6 @@ class HomeService {
     destination: string;
     startDate: string;
     endDate: string;
-    budget: number;
   }) {
     const tripStore = useTripStore();
     const tripInfoStore = useTripInfoStore();
@@ -70,7 +69,6 @@ class HomeService {
           ...currentTripInfo,
           trip: {
             ...currentTripInfo.trip,
-            budget: tripRequest.budget,
             name: tripRequest.name,
             destination: tripRequest.destination,
             startDate: tripRequest.startDate,

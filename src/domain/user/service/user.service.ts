@@ -11,11 +11,7 @@ type UserInfo = {
 class UserService {
   async logout() {
     const authStore = useAuthStore();
-
-
     authStore.logout();
-    
-
     return await axiosInstance.post<ApiResponse<void>>('/api/auth/logout');
   }
 

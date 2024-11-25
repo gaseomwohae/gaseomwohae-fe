@@ -6,21 +6,16 @@
 </script>
 <template>
   <div class="check-item-layout">
-    <!-- <input type="checkbox" :checked="props.checkItem.isChecked" :id="props.checkItem.title" />
-    <label class="check-item-title-text" :for="props.checkItem.title">{{
-      props.checkItem.title
-    }}</label> -->
-
-    <img :src="props.supply.src" /> 
+    <img :src="props.supply.image" />
     <div class="check-item-title-text">{{ props.supply.name }}</div>
   </div>
 </template>
 
 <style scoped>
-img {
-  width: 30px;
-  height: 30px;
-}
+  img {
+    width: 30px;
+    height: 30px;
+  }
   .check-item-layout {
     display: flex;
     flex-direction: row !important;

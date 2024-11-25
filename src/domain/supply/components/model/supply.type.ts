@@ -1,13 +1,11 @@
 export interface SupplyItem {
+  id: number;
   name: string;
-  src: string;
+  image: string;
   category: SupplyCategory;
 }
 
-export type Supplies = {
-  supply: SupplyItem[];
-  category: SupplyCategory;
-}
+export type Supplies = Record<SupplyCategory, SupplyItem[]>;
 
 export type SupplyCategory = 
   | 'REQUIRED'

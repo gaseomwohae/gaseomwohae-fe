@@ -48,12 +48,13 @@
   import { minutesToTime, remToPx, TIME_SLOTS, timeToMinutes } from '../utils/time.util';
   import ScheduleBlock from './ScheduleBlock.vue';
   import TimeSlot from './TimeSlot.vue';
+  import { useTripInfoStore } from '@/stores/tripStore';
 
   const travelStore = useTravelStore();
   const scheduleStore = useScheduleStore();
+  const tripInfoStore = useTripInfoStore();
 
-  const selectedTravel = computed(() => travelStore.selectedTravel);
-  const scheduleDate = computed(() => selectedTravel.value?.startDate ?? '');
+  const scheduleDate = computed(() => tripInfoStore.tripInfo?.trip.startDate ?? '');
   const scheduleList = computed(() => scheduleStore.scheduleList);
 
   // Constants

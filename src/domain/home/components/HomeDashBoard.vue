@@ -10,7 +10,6 @@
   import { useTripInfoStore } from '@/stores/tripStore';
   import { SUPPLIES } from '@/domain/supply/constants/supplies';
   import type { SupplyCategory } from '@/domain/supply/components/model/supply.type';
-  import { travelService } from '@/domain/travel/service/travel.service';
   import {
     Chart as ChartJS,
     Title,

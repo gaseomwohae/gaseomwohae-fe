@@ -13,6 +13,11 @@ export const useScheduleStore = defineStore('schedule', () => {
     console.log(scheduleList.value);
     // TODO: 서버로 전송
   };
+
+  const setScheduleList = (newScheduleList: Schedule[]) => {
+    scheduleList.value = newScheduleList;
+  };
+
   const fetchScheduleList = async () => {
     // TODO: 서버에서 일정 목록 받아오기
     // 임시 데이터
@@ -90,5 +95,6 @@ export const useScheduleStore = defineStore('schedule', () => {
     draggingScheduleDuration,
     deleteSchedule,
     addSchedule,
+    setScheduleList,
   };
 });
