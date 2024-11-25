@@ -16,7 +16,7 @@
     name: '',
     password: '',
     passwordConfirm: '',
-    profileImage: ''
+    profileImage: '/src/assets/icons/profile.png',
   });
 
   const signUpHandler = async () => {
@@ -27,7 +27,7 @@
         return;
       }
 
-      const { passwordConfirm, ...signUpRequest } = signUpForm.value;
+      const { ...signUpRequest } = signUpForm.value;
       const response = await authService.signUp(signUpRequest);
       const apiResponse = response.data as ApiResponse<null>;
 

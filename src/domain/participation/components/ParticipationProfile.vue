@@ -23,18 +23,17 @@
 </script>
 
 <template>
-  <div 
-    class="participation-profile-layout" 
-    :class="{ 
-      'clickable': clickable, 
-
+  <div
+    class="participation-profile-layout"
+    :class="{
+      clickable: clickable,
     }"
   >
     <img
       src="/src/assets/icons/profile.png"
-      :class="{       'selected': selected , clickable: clickable }"
+      :class="{ selected: selected, clickable: clickable }"
     />
-    <div class="participation-profile-name">{{ props.participant?.name }}</div>
+    <div class="participation-profile-name">{{ props.participant.name }}</div>
   </div>
 </template>
 
@@ -62,6 +61,4 @@
   .clickable {
     cursor: pointer; /* 클릭 가능할 때 커서 변경 */
   }
-
-
 </style>

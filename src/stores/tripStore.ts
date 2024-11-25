@@ -1,14 +1,13 @@
 // src/stores/tripStore.ts
 import { defineStore } from 'pinia';
 import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
-import type { ParticipantList } from '@/domain/common/model/Participant.type';
 import type { TripInfo } from '@/domain/home/model/tripInfo.type';
+import type { Participant } from '@/domain/common/model/Participant.type';
 
 export const useTripStore = defineStore('tripStore', {
   state: () => ({
     tripSimpleList: [] as TripSimpleList,
     selectedTripId: null as number | null,
-    participantList: [] as ParticipantList
   }),
   actions: {
     setTripSimpleList(trips: TripSimpleList) {
@@ -17,9 +16,6 @@ export const useTripStore = defineStore('tripStore', {
     setSelectedTripId(tripId: number | null) {
       this.selectedTripId = tripId;
     },
-    setParticipantList(participants: ParticipantList) {
-      this.participantList = participants;
-    }
   }
 }
 );
@@ -28,7 +24,6 @@ export const useTripStore = defineStore('tripStore', {
 export const useTripInfoStore = defineStore('tripInfo', {
   state: () => ({
     tripInfo: null as TripInfo | null,
-    selectedTripId: null as number | null,
   }),
 
   actions: {
@@ -40,18 +35,21 @@ export const useTripInfoStore = defineStore('tripInfo', {
       this.tripInfo = updatedTripInfo;
     },
 
+    // participants만 업데이트하는 메서드 추가
+    updateParticipants(participants: Participant[]) {
+      if (this.tripInfo) {
+        this.tripInfo.participants = [...participants];
+      }
+    },
+
     // 새로운 createTrip 메서드 추가
     createTrip() {
       
     },
 
-    setSelectedTripId(id: number) {
-      this.selectedTripId = id;
-    },
-
     clearTripInfo() {
       this.tripInfo = null;
-      this.selectedTripId = null;
     }
   },
+  
 });

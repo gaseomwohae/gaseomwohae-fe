@@ -13,10 +13,10 @@
 
   const emit = defineEmits(['close', 'update']);
 
-  const tripStore = useTripInfoStore();
+  const tripInfoStore = useTripInfoStore();
 
   // computed로 tripInfo 변화 감지
-  const currentTripInfo = computed(() => tripStore.tripInfo);
+  const currentTripInfo = computed(() => tripInfoStore.tripInfo);
 
   const acceptLottieRef = ref<InstanceType<typeof AcceptLottie> | null>(null);
 
@@ -34,9 +34,9 @@
       if (newTripInfo) {
         formData.value = {
           name: newTripInfo.trip.name,
-          startDate: newTripInfo.tripStartDate,
-          endDate: newTripInfo.tripEndDate,
-          destination: newTripInfo.tripRoute.endDestination.name,
+          startDate: newTripInfo.trip.startDate,
+          endDate: newTripInfo.trip.endDate,
+          destination: newTripInfo.trip.destination,
         };
       }
     },

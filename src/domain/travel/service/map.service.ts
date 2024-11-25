@@ -1,5 +1,6 @@
 import type { Place } from '@/domain/travel/model/travel.type';
-import travelService from '@/domain/travel/service/travel.service';
+
+import PlaceService from '@/domain/travel/service/place.service';
 
 class MapService {
   initMap = (container: string, lat: number, lng: number, mapLevel: number): kakao.maps.Map => {
@@ -46,7 +47,7 @@ class MapService {
         category: store.category_name.split(' > ').slice(0, 2).join(' > '),
         phone: store.phone,
         url: store.place_url,
-        imgUrl: await travelService.getPlaceImage(store.place_name),
+        imgUrl: await PlaceService.getPlaceImage(store.place_name),
         x: store.x,
         y: store.y,
         reviewRate: 0,

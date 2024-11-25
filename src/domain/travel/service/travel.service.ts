@@ -1,20 +1,39 @@
-import axios from 'axios';
+import axiosInstance from '@/domain/common/util/axios';
+import type { ApiResponse } from '@/domain/common/model/response.type';
+import { mapApiResponseToTravelDetail } from '@/domain/travel/model/travelDetai.type';
+import type { ParticipantApiResponse } from '@/domain/common/model/Participant.type';
+import type { Schedule } from '@/domain/travel/model/schedule.type';
+import type { TripSimple } from '@/domain/common/model/TripSimple.type';
+import { useTripInfoStore } from '@/stores/tripStore';
 
-class StoreService {
-  // async getScheduleList(travelId: number, date: string): Promise<Schedule[]> {
-  //   return await axiosInstance.get('/api/schedule');
-  // }
+class TravelService {
+  async getTravelDetail(travelId: number): Promise<void> {
+    const tripInfoStore = useTripInfoStore();
 
-  // async getPlaceDetail(placeId: number): Promise<PlaceWithReview> {
-  //   return await axiosInstance.get('/api/review');
-  // }
+    try {
+      const response = await axiosInstance.get<ApiResponse<{ travel: TripSimple; participants: ParticipantApiResponse[]; schedules: Schedule[] }>>(`/api/travel/${travelId}`);
+      const apiResponse = response.data;
 
-  async getPlaceImage(placeName: string): Promise<string> {
-    const response = await axios.get('http://localhost:3000/api/search/image', {
-      params: { query: placeName },
-    });
-    return response.data.imageUrl;
+      if (apiResponse.code === 200 && apiResponse.success) {
+        console.log('Travel detail fetched successfully:', apiResponse.message);
+        const travelDetail = mapApiResponseToTravelDetail(apiResponse.data);
+        console.log('travelDetail.participants', travelDetail.participants);
+        // tripInfo에 할당
+        tripInfoStore.setTripInfo({
+          trip: travelDetail.travel,
+          participants: travelDetail.participants,
+          supplies: [], // 필요에 따라 추가
+          accomodations: [], // 필요에 따라 추가
+          localVisitors: [], // 필요에 따라 추가
+          budget: 0 // 필요에 따라 추가
+        });
+      } else {
+        console.error('Failed to fetch travel detail:', apiResponse.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching travel detail:', error);
+    }
   }
 }
 
-export default new StoreService();
+export const travelService = new TravelService();

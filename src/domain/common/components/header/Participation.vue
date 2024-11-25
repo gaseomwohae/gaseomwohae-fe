@@ -1,11 +1,9 @@
 <script setup lang="ts">
   import Profile from './Profile.vue';
-  import { useTripStore } from '@/stores/tripStore';
+  import { useTripInfoStore } from '@/stores/tripStore';
   import { computed } from 'vue';
-  const tripStore = useTripStore();
-  // const participantList = tripStore.participantList;
-  const tripSimpleList = tripStore.tripSimpleList;
-  const participantList = computed(() => tripStore.participantList);
+  const tripInfoStore = useTripInfoStore();
+  const participantList = computed(() => tripInfoStore.tripInfo?.participants);
 </script>
 
 <template>

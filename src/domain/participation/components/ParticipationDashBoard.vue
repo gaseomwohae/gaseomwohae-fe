@@ -1,16 +1,26 @@
 <script setup lang="ts">
   import ParticipationProfile from './ParticipationProfile.vue';
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import DropDownItem from '../../common/components/DropDownItem.vue';
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
   import Modal from '@/domain/home/components/Modal.vue';
   import Button from '@/domain/common/components/Button.vue';
   import InputField from '@/domain/auth/components/InputField.vue';
-  import { useTripStore } from '@/stores/tripStore';
-  import { storeToRefs } from 'pinia';
+  import { useTripInfoStore } from '@/stores/tripStore';
 
-  const tripStore = useTripStore();
-  const { participantList } = storeToRefs(tripStore);
+  const tripInfoStore = useTripInfoStore();
+  const participantList = computed(() => tripInfoStore.tripInfo?.participants);
+
+  // participantList의 변화를 감지하고 로그 출력
+  watch(
+    participantList,
+    (newList, oldList) => {
+      console.log('Participant list changed:', newList);
+      console.log('Old participant list:', oldList);
+      console.log('Current participant list:', JSON.stringify(newList, null, 2));
+    },
+    { deep: true },
+  );
 
   const isOpen = ref(false);
   const lottieAnimation = ref<any>(null);
@@ -47,17 +57,17 @@
     if (selectedParticipantId.value !== null) {
       console.log('Current participant list:', participantList.value);
       console.log('Attempting to remove participant ID:', selectedParticipantId.value);
-      
-      const updatedList = participantList.value.filter(participant => {
+
+      const updatedList = participantList.value?.filter((participant) => {
         const keep = participant.id !== selectedParticipantId.value;
         console.log(`Participant ${participant.id}: ${keep ? 'keeping' : 'removing'}`);
         return keep;
       });
-      
+
       console.log('Updated participant list:', updatedList);
-      tripStore.setParticipantList(updatedList);
+      tripInfoStore.updateParticipants(updatedList ?? []);
       console.log('Store updated with new list');
-      
+
       selectedParticipantId.value = null;
     }
     showKickModal.value = false;
@@ -79,17 +89,11 @@
   const handleInviteModalClose = () => {
     showInviteModal.value = false;
   };
-
-  
 </script>
 
 <template>
   <div>
-    <Modal 
-      v-if="showKickModal" 
-      header="추방할 멤버를 선택해주세요."
-      @close="handleKickModalClose"
-    >
+    <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요." @close="handleKickModalClose">
       <template #body>
         <div class="participation-modal-layout">
           <ParticipationProfile
@@ -103,9 +107,9 @@
         </div>
       </template>
       <template #footer>
-        <Button 
-          @click="handleKickClose" 
-          value="추방하기" 
+        <Button
+          @click="handleKickClose"
+          value="추방하기"
           backgroundColor="#FC0E29"
           :disabled="selectedParticipantId === null"
         />
@@ -114,23 +118,12 @@
   </div>
 
   <div>
-    <Modal 
-      v-if="showInviteModal" 
-      :header="modalHeader"
-      @close="handleInviteModalClose"
-    >
+    <Modal v-if="showInviteModal" :header="modalHeader" @close="handleInviteModalClose">
       <template #body>
-        <InputField 
-          id="modal-input" 
-          placeholder="이메일을 입력해주세요." 
-          type="email"
-        />
+        <InputField id="modal-input" placeholder="이메일을 입력해주세요." type="email" />
       </template>
       <template #footer>
-        <Button 
-          @click="handleInviteClose" 
-          value="초대하기"
-        />
+        <Button @click="handleInviteClose" value="초대하기" />
       </template>
     </Modal>
   </div>
@@ -152,6 +145,7 @@
         v-for="participant in participantList"
         :key="participant.id"
         :participant="participant"
+        @select="handleParticipantSelect"
       />
     </div>
   </div>

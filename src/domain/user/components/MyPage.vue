@@ -1,9 +1,11 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
   import { storeToRefs } from 'pinia';
   import { useTripStore } from '@/stores/tripStore';
+  import { userService } from '@/domain/user/service/user.service';
   import type { InviteInfo } from '../types/inviteInfo.type';
+  import { homeService } from '@/domain/home/service/home.service';
 
   const tripStore = useTripStore();
   const { tripSimpleList } = storeToRefs(tripStore);
@@ -11,18 +13,18 @@
   // 참여중인 여행 개수를 computed로 관리
   const participatingTrips = computed(() => tripSimpleList.value.length);
 
-  // 임시 사용자 정보 (나중에 store로 관리)
+  // 사용자 정보 상태
   const userInfo = ref({
-    name: '홍길동',
-    email: 'hong@example.com',
-    profileImage: '/src/assets/icons/profile.png',
-    joinDate: '2024-01-01',
+    name: '',
+    email: '',
+    profileImage: '',
+    // joinDate: '2024-01-01', // 기본값 설정
   });
 
   // 수정용 임시 데이터
   const editingInfo = ref({
     name: userInfo.value.name,
-    currentPassword: '',
+    // currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
@@ -55,7 +57,7 @@
   const handleEdit = () => {
     editingInfo.value = {
       name: userInfo.value.name,
-      currentPassword: '',
+      // currentPassword: '',
       newPassword: '',
       confirmPassword: '',
     };
@@ -87,15 +89,8 @@
     if (acceptedTrip) {
       // Lottie 애니메이션 표시
       acceptLottieRef.value?.showAnimation();
-
       // tripStore에 새로운 여행 추가 (tripId 사용)
-      tripStore.setTripSimpleList([
-        ...tripSimpleList.value,
-        {
-          id: acceptedTrip.tripId, // tripId 사용
-          name: acceptedTrip.tripName,
-        },
-      ]);
+      homeService.getTravelList();
       // 초대 리스트에서 제거
       invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== inviteId);
     }
@@ -111,6 +106,21 @@
       invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== tripId);
     }
   };
+
+  // onMounted 훅을 사용하여 유저 정보를 가져옴
+  onMounted(async () => {
+    try {
+      const data = await userService.getUserInfo();
+      if (data) {
+        userInfo.value = {
+          ...data,
+          // joinDate: userInfo.value.joinDate, // 기존 joinDate 유지
+        };
+      }
+    } catch (error) {
+      console.error('Failed to fetch user info:', error);
+    }
+  });
 </script>
 
 <template>
@@ -141,7 +151,7 @@
         </div>
         <div class="password-section">
           <h3 class="password-title">비밀번호 변경</h3>
-          <div class="input-group">
+          <!-- <div class="input-group">
             <label>현재 비밀번호</label>
             <input
               v-model="editingInfo.currentPassword"
@@ -149,7 +159,7 @@
               class="edit-input"
               placeholder="현재 비밀번호"
             />
-          </div>
+          </div> -->
           <div class="input-group">
             <label>새 비밀번호</label>
             <input
@@ -178,10 +188,10 @@
 
     <!-- 3. 통계 섹션 -->
     <div class="stats-section">
-      <div class="stat-card">
+      <!-- <div class="stat-card">
         <h3>가입일</h3>
         <p>{{ userInfo.joinDate }}</p>
-      </div>
+      </div> -->
       <div class="stat-card">
         <h3>참여중인 여행</h3>
         <p>{{ participatingTrips }}개</p>
@@ -303,7 +313,7 @@
   .stat-card {
     flex: 1;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: #fff;
     border-radius: 12px;
     text-align: center;
   }
