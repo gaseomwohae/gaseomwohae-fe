@@ -113,8 +113,8 @@
 
   // 예산 계산
   const getBudget = computed(() => {
-    if (!tripInfo.value?.budget) return '0원';
-    return `${tripInfo.value.budget.toLocaleString()}원`;
+    if (!tripInfo.value?.trip.budget) return '0원';
+    return `${tripInfo.value.trip.budget.toLocaleString()}원`;
     // 또는
     // return new Intl.NumberFormat('ko-KR').format(tripInfo.value.budget) + '원';
   });

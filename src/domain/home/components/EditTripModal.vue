@@ -25,6 +25,7 @@
     startDate: '',
     endDate: '',
     destination: '',
+    budget: '',
   });
 
   // tripInfo가 변경될 때마다 formData 업데이트
@@ -37,6 +38,7 @@
           startDate: newTripInfo.trip.startDate,
           endDate: newTripInfo.trip.endDate,
           destination: newTripInfo.trip.destination,
+          budget: newTripInfo.trip.budget.toString(),
         };
       }
     },
@@ -52,6 +54,7 @@
       destination: formData.value.destination,
       startDate: formData.value.startDate,
       endDate: formData.value.endDate,
+      budget: Number(formData.value.budget),
     };
 
     try {
@@ -97,6 +100,13 @@
             label="목적지"
             v-model="formData.destination"
             placeholder="여행 목적지"
+          />
+          <InputField
+            type="number"
+            id="budget"
+            label="예산"
+            v-model="formData.budget"
+            placeholder="여행 예산"
           />
         </div>
       </template>

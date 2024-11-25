@@ -33,7 +33,7 @@
       src="/src/assets/icons/profile.png"
       :class="{ selected: selected, clickable: clickable }"
     />
-    <div class="participation-profile-name">{{ props.participant.name }}</div>
+    <div class="participation-profile-name">{{ props.participant?.name }}</div>
   </div>
 </template>
 

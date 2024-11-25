@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import DropDownItem from '../DropDownItem.vue';
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { useRouter } from 'vue-router';
   import { userService } from '@/domain/user/service/user.service';
-
+  import { useInvitationStore } from '@/stores/invitationStore';
+  import { storeToRefs } from 'pinia';
   defineProps<{
     isCollapsed?: boolean;
   }>();
@@ -11,6 +12,13 @@
   const isOpen = ref(false);
 
   const router = useRouter();
+
+  // 초대 목록을 관리하는 Pinia 스토어 사용
+  const invitationStore = useInvitationStore();
+  const { invitations } = storeToRefs(invitationStore);
+
+  // 초대가 있는지 여부를 확인하는 computed
+  const hasInvitations = computed(() => invitations.value.length > 0);
 
   const toggleDropdown = () => {
     console.log('onToggleDropDown', !isOpen.value);
@@ -38,7 +46,7 @@
     >
       <div class="profile-layout">
         <img src="/src/assets/icons/profile.png" alt="profile" class="profile-layout" />
-        <div class="profile-badge"></div>
+        <div v-if="hasInvitations" class="profile-badge"></div>
       </div>
       <span v-show="!isCollapsed">프로필</span>
     </button>
@@ -134,7 +142,7 @@
   }
 
   .profile-badge {
-    display: inline-block; /* todo 초대 알림이 올 시 display 변경 */
+    display: inline-block;
     position: absolute;
     right: 0px;
     top: 0px;

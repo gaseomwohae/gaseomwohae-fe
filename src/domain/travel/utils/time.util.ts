@@ -20,3 +20,23 @@ export const minutesToTime = (minutes: number): string => {
 export const remToPx = (rem: number): number => {
   return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 };
+
+
+
+export function formatDateTime(isoString: string): string {
+  const date = new Date(isoString);
+
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  // 두 자리 숫자로 포맷팅
+  const formattedMonth = month.toString().padStart(2, '0');
+  const formattedDay = day.toString().padStart(2, '0');
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+
+  return `${year}년 ${formattedMonth}월 ${formattedDay}일 ${formattedHours}시 ${formattedMinutes}분`;
+}

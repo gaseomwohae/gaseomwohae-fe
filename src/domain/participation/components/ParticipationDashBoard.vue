@@ -54,6 +54,9 @@
     console.log('Selected participant for removal:', id);
     selectedParticipantId.value = id;
   };
+  const closeKickModal = () => {
+    showKickModal.value = false;
+  };
 
   const handleKickClose = () => {
     if (selectedParticipantId.value !== null) {
@@ -104,7 +107,7 @@
 
 <template>
   <div>
-    <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요." @close="handleKickClose">
+    <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요." @close="closeKickModal">
       <template #body>
         <div class="participation-modal-layout">
           <ParticipationProfile

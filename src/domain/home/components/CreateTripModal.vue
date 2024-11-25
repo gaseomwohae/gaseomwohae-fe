@@ -4,18 +4,14 @@
   import Button from '@/domain/common/components/Button.vue';
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
   import { ref } from 'vue';
-  import { useTripInfoStore } from '@/stores/tripStore';
-  import type { ApiResponse } from '@/domain/common/model/response.type';
-  import type { TripInfo } from '../model/tripInfo.type';
   import { homeService } from '../service/home.service';
 
-  const props = defineProps<{
+  defineProps<{
     show: boolean;
   }>();
 
   const emit = defineEmits(['close', 'create']);
 
-  const tripStore = useTripInfoStore();
   const acceptLottieRef = ref<InstanceType<typeof AcceptLottie> | null>(null);
 
   const formData = ref({
@@ -23,6 +19,7 @@
     startDate: '',
     endDate: '',
     destination: '',
+    budget: '',
   });
 
   const errorMessage = ref('');
@@ -45,6 +42,10 @@
       errorMessage.value = '목적지를 입력해주세요.';
       return;
     }
+    if (!formData.value.budget) {
+      errorMessage.value = '예산을 입력해주세요.';
+      return;
+    }
 
     // 날짜 유효성 검증
     const startDate = new Date(formData.value.startDate);
@@ -61,6 +62,7 @@
         destination: formData.value.destination,
         startDate: formData.value.startDate,
         endDate: formData.value.endDate,
+        budget: Number(formData.value.budget),
       });
 
       acceptLottieRef.value?.showAnimation();
@@ -107,6 +109,14 @@
             label="목적지"
             v-model="formData.destination"
             placeholder="여행 목적지"
+            required
+          />
+          <InputField
+            type="number"
+            id="budget"
+            label="예산"
+            v-model="formData.budget"
+            placeholder="여행 예산을 입력해주세요"
             required
           />
 

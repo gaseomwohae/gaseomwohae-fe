@@ -4,6 +4,7 @@ export type TripSimple = {
   destination: string;
   startDate: string;
   endDate: string;
+  budget: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

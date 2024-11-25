@@ -6,7 +6,7 @@
   import NoneSelectTravel from '@/domain/common/components/NoneSelectTravel.vue';
   import { useRoute } from 'vue-router';
   import { homeService } from '@/domain/home/service/home.service';
-
+  import { participationService } from '@/domain/participation/service/participation.service';
   const route = useRoute();
   const tripStore = useTripStore();
 
@@ -17,6 +17,7 @@
 
   onMounted(async () => {
     await homeService.getTravelList();
+    await participationService.getInvitations(); // 상태 갱신
   });
 </script>
 

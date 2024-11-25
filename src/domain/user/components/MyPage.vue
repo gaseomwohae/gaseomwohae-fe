@@ -4,11 +4,16 @@
   import { storeToRefs } from 'pinia';
   import { useTripStore } from '@/stores/tripStore';
   import { userService } from '@/domain/user/service/user.service';
-  import type { Invitation } from '@/domain/participation/service/participation.service';
   import { homeService } from '@/domain/home/service/home.service';
   import { participationService } from '@/domain/participation/service/participation.service';
+  import { useInvitationStore } from '@/stores/invitationStore';
+
   const tripStore = useTripStore();
   const { tripSimpleList } = storeToRefs(tripStore);
+
+  // 초대 목록을 관리하는 Pinia 스토어 사용
+  const invitationStore = useInvitationStore();
+  const { invitations } = storeToRefs(invitationStore);
 
   // 참여중인 여행 개수를 computed로 관리
   const participatingTrips = computed(() => tripSimpleList.value.length);
@@ -18,19 +23,14 @@
     name: '',
     email: '',
     profileImage: '',
-    // joinDate: '2024-01-01', // 기본값 설정
   });
 
   // 수정용 임시 데이터
   const editingInfo = ref({
     name: userInfo.value.name,
-    // currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
-
-  // 초대받은 여행 리스트 데이터
-  const invitedTrips = ref<Invitation[]>([]);
 
   const isEditing = ref(false);
 
@@ -40,7 +40,6 @@
   const handleEdit = () => {
     editingInfo.value = {
       name: userInfo.value.name,
-      // currentPassword: '',
       newPassword: '',
       confirmPassword: '',
     };
@@ -67,33 +66,33 @@
   };
 
   const handleAcceptInvite = async (inviteId: number) => {
-    const acceptedTrip = invitedTrips.value.find((trip) => trip.id === inviteId);
+    const acceptedTrip = invitations.value.find((trip) => trip.inviteId === inviteId);
 
     if (acceptedTrip) {
       // Lottie 애니메이션 표시
       acceptLottieRef.value?.showAnimation();
       // tripStore에 새로운 여행 추가 (tripId 사용)
-      homeService.getTravelList();
-      // 초대 리스트에서 제거
-      invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== inviteId);
+      try {
+        await participationService.acceptInvitation(inviteId);
+        homeService.getTravelList();
+        // 초대 리스트에서 제거
+        invitationStore.removeInvitation(inviteId);
+      } catch (error) {
+        console.error('Error occurred while accepting invitation:', error);
+      }
     }
   };
 
   const handleRejectInvite = async (inviteId: number) => {
-    const rejectedTrip = invitedTrips.value.find((trip) => trip.id === inviteId);
+    const rejectedTrip = invitations.value.find((trip) => trip.inviteId === inviteId);
 
     if (rejectedTrip) {
       try {
-        const response = await participationService.rejectInvitation(inviteId);
-        if (response.success) {
-          console.log('Invitation rejected successfully:', response.message);
-          // Lottie 애니메이션 표시
-          rejectLottieRef.value?.showAnimation();
-          // 초대 리스트에서 제거
-          invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== inviteId);
-        } else {
-          console.error('Failed to reject invitation:', response.message);
-        }
+        await participationService.rejectInvitation(inviteId);
+        // Lottie 애니메이션 표시
+        rejectLottieRef.value?.showAnimation();
+        // 초대 리스트에서 제거
+        invitationStore.removeInvitation(inviteId);
       } catch (error) {
         console.error('Error occurred while rejecting invitation:', error);
       }
@@ -104,11 +103,10 @@
   onMounted(async () => {
     try {
       const data = await userService.getUserInfo();
-      invitedTrips.value = (await participationService.getInvitations()) || [];
+
       if (data) {
         userInfo.value = {
           ...data,
-          // joinDate: userInfo.value.joinDate, // 기존 joinDate 유지
         };
       }
     } catch (error) {
@@ -145,15 +143,6 @@
         </div>
         <div class="password-section">
           <h3 class="password-title">비밀번호 변경</h3>
-          <!-- <div class="input-group">
-            <label>현재 비밀번호</label>
-            <input
-              v-model="editingInfo.currentPassword"
-              type="password"
-              class="edit-input"
-              placeholder="현재 비밀번호"
-            />
-          </div> -->
           <div class="input-group">
             <label>새 비밀번호</label>
             <input
@@ -182,10 +171,6 @@
 
     <!-- 3. 통계 섹션 -->
     <div class="stats-section">
-      <!-- <div class="stat-card">
-        <h3>가입일</h3>
-        <p>{{ userInfo.joinDate }}</p>
-      </div> -->
       <div class="stat-card">
         <h3>참여중인 여행</h3>
         <p>{{ participatingTrips }}개</p>
@@ -195,15 +180,17 @@
     <!-- 4. 초대 섹션 -->
     <div class="invites-section">
       <h3 class="section-title">초대받은 여행</h3>
-      <div class="invites-list" v-if="invitedTrips.length > 0">
-        <div v-for="trip in invitedTrips" :key="trip.id" class="invite-card">
+      <div class="invites-list" v-if="invitations.length > 0">
+        <div v-for="trip in invitations" :key="trip.inviteId" class="invite-card">
           <div class="invite-info">
-            <h4>{{ trip.tripName }}</h4>
-            <p class="invite-details">초대한 사람: {{ trip.inviter }} · {{ trip.inviteDate }}</p>
+            <h4>{{ trip.travel.name }}</h4>
+            <p class="invite-details">
+              초대한 사람: {{ trip.inviterUser.name }} · {{ trip.createdAt }}
+            </p>
           </div>
           <div class="invite-actions">
-            <button class="accept-button" @click="handleAcceptInvite(trip.id)">수락</button>
-            <button class="reject-button" @click="handleRejectInvite(trip.id)">거절</button>
+            <button class="accept-button" @click="handleAcceptInvite(trip.inviteId)">수락</button>
+            <button class="reject-button" @click="handleRejectInvite(trip.inviteId)">거절</button>
           </div>
         </div>
       </div>
