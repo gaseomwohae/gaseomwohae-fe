@@ -4,9 +4,9 @@
   import { storeToRefs } from 'pinia';
   import { useTripStore } from '@/stores/tripStore';
   import { userService } from '@/domain/user/service/user.service';
-  import type { InviteInfo } from '../types/inviteInfo.type';
+  import type { Invitation } from '@/domain/participation/service/participation.service';
   import { homeService } from '@/domain/home/service/home.service';
-
+  import { participationService } from '@/domain/participation/service/participation.service';
   const tripStore = useTripStore();
   const { tripSimpleList } = storeToRefs(tripStore);
 
@@ -30,24 +30,7 @@
   });
 
   // 초대받은 여행 리스트 데이터
-  const invitedTrips = ref<InviteInfo[]>([
-    {
-      id: 1,
-      tripId: 101,
-      tripName: '제주도 여행',
-      inviter: '김철수',
-      inviteDate: '2024-03-15',
-      status: 'pending',
-    },
-    {
-      id: 2,
-      tripId: 102,
-      tripName: '부산 여행',
-      inviter: '이영희',
-      inviteDate: '2024-03-14',
-      status: 'pending',
-    },
-  ]);
+  const invitedTrips = ref<Invitation[]>([]);
 
   const isEditing = ref(false);
 
@@ -96,14 +79,24 @@
     }
   };
 
-  const handleRejectInvite = (tripId: number) => {
-    const rejectedTrip = invitedTrips.value.find((trip) => trip.id === tripId);
+  const handleRejectInvite = async (inviteId: number) => {
+    const rejectedTrip = invitedTrips.value.find((trip) => trip.id === inviteId);
 
     if (rejectedTrip) {
-      // Lottie 애니메이션 표시
-      rejectLottieRef.value?.showAnimation();
-      // 초대 리스트에서 제거
-      invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== tripId);
+      try {
+        const response = await participationService.rejectInvitation(inviteId);
+        if (response.success) {
+          console.log('Invitation rejected successfully:', response.message);
+          // Lottie 애니메이션 표시
+          rejectLottieRef.value?.showAnimation();
+          // 초대 리스트에서 제거
+          invitedTrips.value = invitedTrips.value.filter((trip) => trip.id !== inviteId);
+        } else {
+          console.error('Failed to reject invitation:', response.message);
+        }
+      } catch (error) {
+        console.error('Error occurred while rejecting invitation:', error);
+      }
     }
   };
 
@@ -111,6 +104,7 @@
   onMounted(async () => {
     try {
       const data = await userService.getUserInfo();
+      invitedTrips.value = (await participationService.getInvitations()) || [];
       if (data) {
         userInfo.value = {
           ...data,

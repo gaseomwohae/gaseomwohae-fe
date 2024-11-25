@@ -7,6 +7,7 @@
   import Button from '@/domain/common/components/Button.vue';
   import InputField from '@/domain/auth/components/InputField.vue';
   import { useTripInfoStore } from '@/stores/tripStore';
+  import { participationService } from '@/domain/participation/service/participation.service';
 
   const tripInfoStore = useTripInfoStore();
   const participantList = computed(() => tripInfoStore.tripInfo?.participants);
@@ -30,6 +31,7 @@
   const showKickModal = ref(false);
 
   const modalHeader = ref('새로운 멤버를 초대해주세요.');
+  const inviteEmail = ref(''); // 초대할 이메일
 
   const onMenuClick = () => {
     isOpen.value = !isOpen.value;
@@ -75,15 +77,24 @@
     lottieTitle.value = '추방이 완료되었습니다.';
   };
 
-  const handleInviteClose = () => {
-    showInviteModal.value = false;
-    showAnimation();
-    lottieTitle.value = '초대가 완료되었습니다.';
-  };
-
-  const handleKickModalClose = () => {
-    showKickModal.value = false;
-    selectedParticipantId.value = null;
+  const handleInviteClose = async () => {
+    try {
+      const travelId = tripInfoStore.tripInfo?.trip.id;
+      if (travelId && inviteEmail.value) {
+        const response = await participationService.inviteParticipant(travelId, inviteEmail.value);
+        if (response.success) {
+          console.log('Invitation sent successfully:', response.message);
+          showAnimation();
+          lottieTitle.value = '초대가 완료되었습니다.';
+        } else {
+          console.error('Failed to send invitation:', response.message);
+        }
+      }
+    } catch (error) {
+      console.error('Error occurred while sending invitation:', error);
+    } finally {
+      showInviteModal.value = false;
+    }
   };
 
   const handleInviteModalClose = () => {
@@ -93,7 +104,7 @@
 
 <template>
   <div>
-    <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요." @close="handleKickModalClose">
+    <Modal v-if="showKickModal" header="추방할 멤버를 선택해주세요." @close="handleKickClose">
       <template #body>
         <div class="participation-modal-layout">
           <ParticipationProfile
@@ -120,7 +131,12 @@
   <div>
     <Modal v-if="showInviteModal" :header="modalHeader" @close="handleInviteModalClose">
       <template #body>
-        <InputField id="modal-input" placeholder="이메일을 입력해주세요." type="email" />
+        <InputField
+          v-model="inviteEmail"
+          id="modal-input"
+          placeholder="이메일을 입력해주세요."
+          type="email"
+        />
       </template>
       <template #footer>
         <Button @click="handleInviteClose" value="초대하기" />
