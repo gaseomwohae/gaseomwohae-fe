@@ -15,6 +15,22 @@ class ReviewService {
       throw error;
     }
   }
+
+  // 리뷰 생성
+  async createReview(reviewData: {
+    placeId: number;
+    rating: number;
+    content: string;
+    image: string;
+  }): Promise<ApiResponse<null>> {
+    try {
+      const response = await axiosInstance.post<ApiResponse<null>>(`/api/review`, reviewData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error occurred while creating review:', error);
+      throw error;
+    }
+  }
 }
 
 export const reviewService = new ReviewService();

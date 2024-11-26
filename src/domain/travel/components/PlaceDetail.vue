@@ -26,6 +26,9 @@
     <div class="place-review__review-section">
       <div class="place-review__review-section__header font-2xl font-bold">
         리뷰({{ placeDetail?.reviews.length }})
+        <button class="create-review-button" @click="createReviewModalRef.openModal">
+          리뷰 생성
+        </button>
       </div>
       <div class="place-review__review-section__reviews">
         <div v-for="review in placeDetail?.reviews" :key="review.id">
@@ -33,6 +36,7 @@
         </div>
       </div>
     </div>
+    <CreateReviewModal ref="createReviewModalRef" />
   </div>
 </template>
 
@@ -41,9 +45,13 @@
   import { usePlaceStore } from '@/stores/place.store';
   import { storeToRefs } from 'pinia';
   import PlaceSummary from './PlaceSummary.vue';
+  import CreateReviewModal from '@/domain/review/components/CreateReviewModal.vue';
+  import { ref } from 'vue';
 
   const placeStore = usePlaceStore();
   const { placeDetail } = storeToRefs(placeStore);
+
+  const createReviewModalRef = ref();
 </script>
 
 <style scoped>
@@ -70,7 +78,7 @@
     padding: 1.5rem;
   }
 
-  .place-review__ place-section__description {
+  .place-review__place-section__description {
     letter-spacing: 0.02rem;
     line-height: 1.3;
   }
@@ -89,5 +97,15 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+
+  .create-review-button {
+    margin-left: auto;
+    padding: 0.5rem 1rem;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
   }
 </style>
