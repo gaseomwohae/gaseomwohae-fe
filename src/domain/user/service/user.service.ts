@@ -2,7 +2,7 @@ import axiosInstance from '@/domain/common/util/axios';
 import type { ApiResponse } from '@/domain/common/model/response.type';
 import { useAuthStore } from '@/stores/auth';
 
-type UserInfo = {
+export type UserInfo = {
   id: number;
   name: string;
   email: string;

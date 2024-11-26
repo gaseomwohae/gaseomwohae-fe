@@ -1,7 +1,7 @@
 // src/stores/tripStore.ts
 import { defineStore } from 'pinia';
 import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
-import type { TripInfo } from '@/domain/home/model/tripInfo.type';
+import type { Position, TripInfo } from '@/domain/home/model/tripInfo.type';
 import type { Participant } from '@/domain/common/model/Participant.type';
 import type { Schedule } from '@/domain/travel/model/travel.type';
 import type { SupplyItem } from '@/domain/supply/components/model/supply.type';
@@ -28,6 +28,12 @@ export const useTripInfoStore = defineStore('tripInfo', {
   }),
 
   actions: {
+    updatePosition(position: Position) {
+      if (this.tripInfo) {
+        this.tripInfo.position = position;
+      }
+    },
+    // tripInfo 설정 메서드 추가
     setTripInfo(tripInfo: TripInfo) {
       this.tripInfo = tripInfo;
     },

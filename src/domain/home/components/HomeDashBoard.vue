@@ -19,6 +19,7 @@
     CategoryScale,
     LinearScale,
   } from 'chart.js';
+  import type { WeatherInfo } from '@/domain/travel/model/travel.type';
 
   const tripInfoStore = useTripInfoStore();
   ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
@@ -29,27 +30,6 @@
   };
   const chartOptions = {
     responsive: true,
-  };
-
-  const locationWeather: LocationWeather = {
-    location: '서울',
-    weather: [
-      {
-        weather: '맑음',
-        temperature: '22°C',
-        dayOfWeek: '월요일',
-      },
-      {
-        weather: '흐림',
-        temperature: '18°C',
-        dayOfWeek: '화요일',
-      },
-      {
-        weather: '비',
-        temperature: '20°C',
-        dayOfWeek: '수요일',
-      },
-    ],
   };
 
   const selectedColor = ref('blue');
@@ -76,6 +56,23 @@
   });
 
   const tripInfo = computed(() => tripInfoStore.tripInfo);
+
+  const locationWeather = computed(() => {
+    const weatherData =
+      tripInfo.value?.weatherInfos?.map((info) => ({
+        date: new Date(info.date).getDate(), // 날짜를 일(day)로 파싱
+        minTemp: info.minTemp,
+        maxTemp: info.maxTemp,
+        sky: info.sky, // sky는 그대로 유지
+      })) || [];
+
+    console.log('weatherData', weatherData);
+
+    return {
+      location: tripInfo.value?.trip.destination ?? '',
+      weather: weatherData,
+    };
+  });
 
   const localVisitors = computed(() => {
     if (!tripInfo.value?.localVisitors) return [];
@@ -159,7 +156,7 @@
           :content="getParticipantsCount"
           :subContent="getParticipantNames"
         />
-        <InfoCard title="목적지" :content="getDestination" :subContent="getTripRouteInfo" />
+        <InfoCard title="목적지" :content="getDestination" />
         <InfoCard title="예산" :content="getBudget" />
       </div>
       <div class="dashboard-info-card-layout">

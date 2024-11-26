@@ -5,6 +5,7 @@ export type LocationWeather = {
 
 export type Weather = {
   weather: string;
-  temperature: string;
+  minTemp: number;
+  maxTemp: number;
   dayOfWeek: string;
 };

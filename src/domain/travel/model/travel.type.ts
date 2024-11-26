@@ -1,6 +1,13 @@
+// src/domain/travel/model/travel.type.ts
 
 import type { UserInfo } from '@/domain/user/service/user.service';
 
+export type WeatherInfo = {
+  date: string;    // 날짜 (예: "2024-11-28")
+  minTemp: number; // 최저 기온
+  maxTemp: number; // 최고 기온
+  sky: number;     // 하늘 상태 (1: 맑음, 4: 흐림, 5: 비 등)
+};
 
 export interface Schedule {
   scheduleId: number;

@@ -19,13 +19,15 @@
 
   const emptyChartData = {
     labels: [],
-    datasets: [{
-      label: '지역 방문자 수',
-      data: [],
-      borderWidth: 1,
-      backgroundColor: [],
-      borderColor: [],
-    }]
+    datasets: [
+      {
+        label: '지역 방문자 수',
+        data: [],
+        borderWidth: 1,
+        backgroundColor: [],
+        borderColor: [],
+      },
+    ],
   };
 
   const updateChartData = (visitors: LocalVisitor[]) => {
@@ -35,30 +37,35 @@
 
     if (!myChart.value) return;
 
-    const chartData = visitors.length > 0 ? {
-      labels: visitors.map(visitor => visitor.name),
-      datasets: [{
-        label: '지역 방문자 수',
-        data: visitors.map(visitor => visitor.visitorCount),
-        borderWidth: 1,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)',
-        ],
-      }]
-    } : emptyChartData;
+    const chartData =
+      visitors.length > 0
+        ? {
+            labels: visitors.map((visitor) => visitor.name),
+            datasets: [
+              {
+                label: '지역 방문자 수',
+                data: visitors.map((visitor) => visitor.visitorCount),
+                borderWidth: 1,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                ],
+              },
+            ],
+          }
+        : emptyChartData;
 
     chartInstance = new Chart(myChart.value, {
       type: 'bar',
@@ -74,15 +81,19 @@
         plugins: {
           legend: {
             display: visitors.length > 0,
-          }
-        }
+          },
+        },
       },
     });
   };
 
-  watch(() => props.localVisitors, (newVisitors) => {
-    updateChartData(newVisitors);
-  }, { deep: true });
+  watch(
+    () => props.localVisitors,
+    (newVisitors) => {
+      updateChartData(newVisitors);
+    },
+    { deep: true },
+  );
 
   onMounted(() => {
     updateChartData(props.localVisitors);

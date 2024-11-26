@@ -5,7 +5,12 @@ export const TIME_SLOTS = Array.from({ length: 48 }, (_, i) => {
   return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 });
 
-export const timeToMinutes = (time: string): number => {
+export const timeToMinutes = (time: string | undefined): number => {
+  if (!time) {
+    console.error('Invalid time input:', time);
+    return 0; // 기본값을 반환하거나 예외를 던질 수 있습니다.
+  }
+
   const [hours, minutes] = time.split(':').map(Number);
   return hours * 60 + minutes;
 };
