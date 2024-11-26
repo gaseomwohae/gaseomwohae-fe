@@ -6,7 +6,7 @@
 </script>
 <template>
   <div class="weather-layout">
-    <img src="/src/assets/icons/rain.png" alt="weather" />
+    <img :src="`/src/assets/icons/${props.weather.weather}.png`" alt="weather" />
     <div class="weather-temperature-text">{{ props.weather.minTemp }}℃</div>
     <div class="weather-temperature-text">{{ props.weather.maxTemp }}℃</div>
     <div class="weather-dayofweek-text">{{ props.weather.dayOfWeek }}</div>

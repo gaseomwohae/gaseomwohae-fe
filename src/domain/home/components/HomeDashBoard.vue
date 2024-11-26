@@ -63,7 +63,7 @@
         date: new Date(info.date).getDate(), // 날짜를 일(day)로 파싱
         minTemp: info.minTemp,
         maxTemp: info.maxTemp,
-        sky: info.sky, // sky는 그대로 유지
+        weather: info.sky, // sky는 그대로 유지
       })) || [];
 
     console.log('weatherData', weatherData);
