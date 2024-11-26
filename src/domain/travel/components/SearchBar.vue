@@ -31,12 +31,31 @@
     for (const place of places) {
       console.log(place.name);
     }
-    for (const place of places) {
-      await placeService.createPlace(place);
-    }
+    await placeService.createPlaces(places);
 
     placeStore.updateSearchedPlaces(places);
   };
+
+  // 예시로 사용할 장소 리스트
+  const places: Place[] = [
+    // ... 장소 객체들
+  ];
+
+  // 장소 리스트를 한 번에 생성
+  const createAllPlaces = async () => {
+    try {
+      const response = await placeService.createPlaces(places);
+      if (response.success) {
+        console.log('All places created successfully');
+      } else {
+        console.error('Failed to create all places:', response.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while creating all places:', error);
+    }
+  };
+
+  createAllPlaces();
 </script>
 
 <style scoped>

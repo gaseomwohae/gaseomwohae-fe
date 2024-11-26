@@ -1,35 +1,44 @@
 import axios from 'axios';
 import axiosInstance from '@/domain/common/util/axios';
-
-import type { Place } from '@/domain/travel/model/travel.type';
 import type { ApiResponse } from "@/domain/common/model/response.type";
+import type { Place } from '@/domain/travel/model/travel.type';
+import { usePlaceStore } from '@/stores/place.store';
 
 class PlaceService {
-  // 장소 생성하기
-  async createPlace(place: Place): Promise<ApiResponse<null>> {
+  // 여러 장소 생성하기
+  async createPlaces(places: Place[]): Promise<void> {
     try {
-      const response = await axiosInstance.post<ApiResponse<null>>('/api/place', place);
+      const response = await axiosInstance.post<ApiResponse<{ id: number; rating: number }[]>>('/api/place', places);
       const apiResponse = response.data;
 
       if (apiResponse.code === 200 && apiResponse.success) {
-        console.log('Place created successfully:', apiResponse.message);
+        console.log('Places created successfully:', apiResponse.message);
+        this.updatePlaceRatings(apiResponse.data);
       } else {
-        console.error('Failed to create place:', apiResponse.message);
+        console.error('Failed to create places:', apiResponse.message);
       }
-      return apiResponse;
     } catch (error: any) {
-      // 에러 응답이 있고, 'Resource already exists' 메시지인 경우
-      if (error.response?.data?.message === 'Resource already exists') {
-        console.log('Place already exists, skipping error');
-        return error.response.data;
-      }
-      
-      console.error('Error occurred while creating place:', error);
+      console.error('Error occurred while creating places:', error);
       throw error;
     }
   }
 
-  
+  // 응답으로 받은 id와 rating을 사용하여 placeStore의 rating 갱신
+  private updatePlaceRatings(ratings: { id: number; rating: number }[]) {
+    const placeStore = usePlaceStore();
+    console.log('updatePlaceRatings', placeStore.searchedPlaces);
+    const updatedPlaces = placeStore.searchedPlaces.map(place => {
+      const ratingInfo = ratings.find(r => r.id === place.id);
+      console.log('ratingInfo', ratingInfo);
+      if (ratingInfo) {
+        return { ...place, rating: ratingInfo.rating };
+      }
+      return place;
+    });
+    placeStore.updateSearchedPlaces(updatedPlaces);
+
+  }
+
   async getPlaceImage(placeName: string): Promise<string> {
     const response = await axios.get('http://localhost:3000/api/search/image', {
       params: { query: placeName },

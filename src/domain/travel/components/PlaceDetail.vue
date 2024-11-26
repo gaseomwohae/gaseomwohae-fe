@@ -17,6 +17,7 @@
             createdAt: placeDetail.createdAt,
             updatedAt: placeDetail.updatedAt,
             deletedAt: placeDetail.deletedAt,
+            rating: placeDetail.rating,
           }"
         />
       </div>

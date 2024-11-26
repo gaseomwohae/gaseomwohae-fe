@@ -9,7 +9,8 @@
         </div>
         <div class="place-card__body">
           <div class="place-card__address font-s">{{ place.address }}</div>
-          <ReviewBlock :reviewRate="place.reviewRate" />
+          {{ place.rating }}
+          <ReviewBlock :reviewRate="place.rating" />
         </div>
       </div>
     </div>

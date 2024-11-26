@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
   import { useScheduleStore } from '@/stores/schedule.store';
-  import { computed, ref } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import type { Schedule } from '../model/travel.type';
   import { minutesToTime, remToPx, timeToMinutes } from '../utils/time.util';
   import PlaceSummary from './PlaceSummary.vue';
@@ -37,7 +37,19 @@
   const isResizing = ref<boolean>(false);
   const resizeType = ref<'top' | 'bottom' | null>(null);
 
-  // 블록을 움직일때 투두 아이디와 시간을 이벤트로 전달(블록 영역 드래그)
+  const newStartTime = ref(props.schedule.startTime);
+  const newEndTime = ref(props.schedule.endTime);
+
+  // props.schedule의 변경을 감지하여 newStartTime과 newEndTime을 업데이트
+  watch(
+    () => props.schedule,
+    (newSchedule) => {
+      newStartTime.value = newSchedule.startTime;
+      newEndTime.value = newSchedule.endTime;
+    },
+    { deep: true },
+  );
+
   const handleDragStart = () => {
     scheduleStore.setDraggingSchedule(props.schedule);
   };
@@ -55,43 +67,43 @@
 
     const newTime = calculateTimeFromMousePosition(e);
 
-    // 현재 시작 시간과 종료 시간
-    let newStartTime = props.schedule.startTime;
-    let newEndTime = props.schedule.endTime;
-
-    // resizeType에 따라 변경할 시간 설정
     if (resizeType.value === 'top') {
-      newStartTime = newTime;
+      newStartTime.value = newTime;
     } else {
-      newEndTime = newTime;
+      newEndTime.value = newTime;
     }
 
-    // 시간 차이 계산
-    const duration = timeToMinutes(newEndTime) - timeToMinutes(newStartTime);
+    const duration = timeToMinutes(newEndTime.value) - timeToMinutes(newStartTime.value);
 
-    // 최소/최대 시간 체크
     if (duration < MIN_DURATION || duration > MAX_DURATION) {
       return;
     }
-
-    // 업데이트된 스케줄 전달
-    emit('update-start-time', {
-      ...props.schedule,
-      startTime: newStartTime,
-      endTime: newEndTime,
-    });
   };
 
   const handleMouseUp = () => {
+    if (!isResizing.value) return;
+
+    if (resizeType.value === 'top') {
+      emit('update-start-time', {
+        ...props.schedule,
+        startTime: newStartTime.value,
+        endTime: newEndTime.value,
+      });
+    } else if (resizeType.value === 'bottom') {
+      emit('update-end-time', {
+        ...props.schedule,
+        startTime: newStartTime.value,
+        endTime: newEndTime.value,
+      });
+    }
+
     isResizing.value = false;
     resizeType.value = null;
     document.removeEventListener('mousemove', handleMouseMove);
     document.removeEventListener('mouseup', handleMouseUp);
   };
 
-  // 마스 위치를 시간으로 변환 - 30분 단위로 즉시 스냅
   const calculateTimeFromMousePosition = (e: MouseEvent): string => {
-    // time-table__body 요소 찾기
     const scheduleBody = (e.target as HTMLElement)
       .closest('.time-table__body')
       ?.getBoundingClientRect();
@@ -101,7 +113,6 @@
       return props.schedule.startTime;
     }
 
-    // time-slot 요소 찾기
     const timeSlot = (e.target as HTMLElement)
       .closest('.time-table__body')
       ?.querySelector('.time-slot')
@@ -112,13 +123,8 @@
       return props.schedule.startTime;
     }
 
-    // 마우스 위치에서 time-table__body 위치를 뺀 값
     const relativeY = e.clientY - scheduleBody.top;
-
-    // time-slot 요소의 높이
     const slotHeight = timeSlot.height;
-
-    // 30분 단위로 반올림
     const slots = Math.round(relativeY / slotHeight);
     const minutes = Math.max(0, Math.min(24 * 60 - MINUTES_PER_SLOT, slots * MINUTES_PER_SLOT));
 
@@ -126,8 +132,8 @@
   };
 
   const scheduleStyle = computed(() => {
-    const startPosition = calculatePosition(props.schedule.startTime);
-    const endPosition = calculatePosition(props.schedule.endTime);
+    const startPosition = calculatePosition(newStartTime.value);
+    const endPosition = calculatePosition(newEndTime.value);
     const height = endPosition - startPosition;
 
     return {

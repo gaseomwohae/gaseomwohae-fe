@@ -22,6 +22,7 @@ export interface Place {
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
+  rating: number; // 상태 관리 시 사용할 rating 필드 추가
 }
 
 export interface Review {

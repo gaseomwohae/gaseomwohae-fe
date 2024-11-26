@@ -27,9 +27,11 @@ class ScheduleService {
         console.log('Schedule added successfully:', apiResponse.message);
         // store에 직접 추가
         const scheduleStore = useScheduleStore();
+
+        console.log('scheduleId apiResponse.data', apiResponse.data.id);
         const newSchedule = { 
           ...schedule, 
-          scheduleId: apiResponse.data 
+          scheduleId: apiResponse.data.id
         };
         const updatedScheduleList = [...scheduleStore.scheduleList, newSchedule];
         scheduleStore.setScheduleList(updatedScheduleList);
