@@ -23,6 +23,7 @@
           class="styled-input"
           required
         ></textarea>
+        <p v-if="error" class="error-message">{{ error }}</p>
       </div>
       <div class="form-group">
         <label for="image">이미지 URL</label>
@@ -33,20 +34,25 @@
     <template #footer>
       <div class="modal-footer">
         <button class="cancel-button" @click="closeModal">취소</button>
-        <button class="submit-button" @click="submitReview">생성</button>
+        <button class="submit-button" @click="submitReview" :disabled="isSubmitting">
+          {{ isSubmitting ? '검증 중...' : '생성' }}
+        </button>
       </div>
     </template>
   </Modal>
 </template>
 
 <script setup lang="ts">
-  import { ref, defineExpose } from 'vue';
   import Modal from '@/domain/home/components/Modal.vue';
-  import { reviewService } from '@/domain/review/service/review.service';
+  import { openAi } from '@/domain/travel/utils/openai';
   import { usePlaceStore } from '@/stores/place.store';
+  import { defineExpose, ref } from 'vue';
 
   const placeStore = usePlaceStore();
   const show = ref(false);
+  const error = ref('');
+  const isSubmitting = ref(false);
+
   const reviewData = ref({
     placeId: placeStore.placeDetail?.id ?? 0,
     rating: 0,
@@ -56,13 +62,41 @@
 
   const closeModal = () => {
     show.value = false;
+    error.value = '';
+    reviewData.value = {
+      placeId: placeStore.placeDetail?.id ?? 0,
+      rating: 0,
+      content: '',
+      image: '',
+    };
   };
 
-  const submitReview = () => {
-    // 리뷰 생성 로직 추가
-    console.log('Review submitted:', reviewData.value);
-    placeStore.createReview(reviewData.value);
-    closeModal();
+  const submitReview = async () => {
+    if (!reviewData.value.content) {
+      error.value = '리뷰 내용을 입력해주세요.';
+      return;
+    }
+
+    isSubmitting.value = true;
+    error.value = '';
+
+    try {
+      // OpenAI로 리뷰 검증
+      const isValid = await openAi(reviewData.value.content);
+      console.log(isValid);
+
+      if (isValid.toLowerCase() === 'true') {
+        await placeStore.createReview(reviewData.value);
+        closeModal();
+      } else {
+        error.value = '부적절한 리뷰입니다. 다시 작성해주세요.';
+      }
+    } catch (e) {
+      error.value = '리뷰 검증 중 오류가 발생했습니다.';
+      console.error(e);
+    } finally {
+      isSubmitting.value = false;
+    }
   };
 
   const openModal = () => {
@@ -137,5 +171,11 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+  }
+
+  .error-message {
+    color: #f44336;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
   }
 </style>
