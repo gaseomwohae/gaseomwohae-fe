@@ -3,8 +3,30 @@
   import InputField from '@/domain/auth/components/InputField.vue';
   import Button from '@/domain/common/components/Button.vue';
   import AcceptLottie from '@/domain/common/components/AcceptLottie.vue';
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { homeService } from '../service/home.service';
+  import axiosInstance from '@/domain/common/util/axios';
+
+  // 여행 목적지 목록
+  const cities = [
+    '서울특별시',
+    '부산광역시',
+    '대구광역시',
+    '인천광역시',
+    '광주광역시',
+    '대전광역시',
+    '울산광역시',
+    '세종특별자치시',
+    '경기도',
+    '강원도',
+    '충청북도',
+    '충청남도',
+    '전라북도',
+    '전라남도',
+    '경상북도',
+    '경상남도',
+    '제주도',
+  ];
 
   defineProps<{
     show: boolean;
@@ -18,11 +40,49 @@
     name: '',
     startDate: '',
     endDate: '',
+    city: '',
+    district: '',
     destination: '',
     budget: '',
   });
 
   const errorMessage = ref('');
+
+  const districts = ref<string[]>([]);
+
+  const fetchDistricts = async () => {
+    try {
+      const response = await axiosInstance.get(`/api/region/districts`, {
+        params: { city: formData.value.city },
+      });
+      if (response.data.code === 200) {
+        districts.value = response.data.data;
+      } else {
+        console.error('Failed to fetch districts:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching districts:', error);
+    }
+  };
+
+  const fetchLocation = async () => {
+    if (formData.value.city && formData.value.district) {
+      try {
+        const response = await axiosInstance.get(`/api/region/locations`, {
+          params: { city: formData.value.city, district: formData.value.district },
+        });
+        if (response.data.code === 200) {
+          const { x, y } = response.data.data;
+          formData.value.destination = `${formData.value.city} ${formData.value.district}`;
+          console.log(`Location coordinates: x=${x}, y=${y}`);
+        } else {
+          console.error('Failed to fetch location:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error occurred while fetching location:', error);
+      }
+    }
+  };
 
   const handleSubmit = async () => {
     // 입력값 검증
@@ -103,14 +163,34 @@
             placeholder="여행 종료일"
             required
           />
-          <InputField
-            type="text"
-            id="destination"
-            label="목적지"
-            v-model="formData.destination"
-            placeholder="여행 목적지"
-            required
-          />
+          <div class="form-group">
+            <div class="form-group" style="font-size: 12px; font-weight: bold; margin-bottom: 10px">
+              목적지
+            </div>
+            <label for="destination">시/도</label>
+
+            <select
+              id="destination"
+              v-model="formData.city"
+              class="styled-select"
+              @change="fetchDistricts"
+            >
+              <option v-for="city in cities" :key="city" :value="city">{{ city }}</option>
+            </select>
+          </div>
+          <div class="form-group" v-if="districts.length">
+            <label for="district">구/군</label>
+            <select
+              id="district"
+              v-model="formData.district"
+              class="styled-select"
+              @change="fetchLocation"
+            >
+              <option v-for="district in districts" :key="district" :value="district">
+                {{ district }}
+              </option>
+            </select>
+          </div>
           <InputField
             type="number"
             id="budget"
@@ -150,5 +230,22 @@
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .styled-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .styled-select:focus {
+    outline: none;
   }
 </style>
