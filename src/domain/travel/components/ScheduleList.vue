@@ -1,6 +1,22 @@
 <template>
   <div class="schedule-list">
-    <div class="time-table__header font-xl font-extra-bold">{{ scheduleDate }}</div>
+    <div class="time-table__header font-xl font-extra-bold">
+      <button
+        class="date-change-button"
+        @click="changeDate('prev')"
+        :disabled="new Date(scheduleDate) <= startDate"
+      >
+        이전
+      </button>
+      <span class="date-text">{{ scheduleDate }}</span>
+      <button
+        class="date-change-button"
+        @click="changeDate('next')"
+        :disabled="new Date(scheduleDate) >= endDate"
+      >
+        다음
+      </button>
+    </div>
     <div class="time-table">
       <div class="time-table__body" @dragover="handleDragOver" @drop="handleDrop">
         <div v-for="time in TIME_SLOTS" :key="time" class="time-slot">
@@ -52,8 +68,30 @@
   const scheduleStore = useScheduleStore();
   const tripInfoStore = useTripInfoStore();
 
-  const scheduleDate = computed(() => tripInfoStore.tripInfo?.trip.startDate ?? '');
+  const scheduleDate = ref(tripInfoStore.tripInfo?.trip.startDate ?? '');
   const scheduleList = computed(() => scheduleStore.scheduleList);
+
+  // 여행 날짜 범위
+  const startDate = computed(() => new Date(tripInfoStore.tripInfo?.trip.startDate ?? ''));
+  const endDate = computed(() => new Date(tripInfoStore.tripInfo?.trip.endDate ?? ''));
+
+  // 날짜를 변경하는 함수
+  const changeDate = (direction: 'prev' | 'next') => {
+    console.log('changeDate', direction);
+    const currentDate = new Date(scheduleDate.value);
+    if (direction === 'prev') {
+      currentDate.setDate(currentDate.getDate() - 1);
+      scheduleDate.value = currentDate.toISOString().split('T')[0];
+    } else if (direction === 'next') {
+      currentDate.setDate(currentDate.getDate() + 1);
+      scheduleDate.value = currentDate.toISOString().split('T')[0];
+    }
+
+    // 변경된 날짜가 여행 날짜 범위 내에 있는지 확인
+    // if (currentDate >= startDate.value && currentDate <= endDate.value) {
+    //   scheduleDate.value = currentDate.toISOString().split('T')[0];
+    // }
+  };
 
   // scheduleList의 변화를 감지하여 콘솔에 출력
   watch(
@@ -262,7 +300,9 @@
     position: sticky;
     background-color: #ffffff;
     border-bottom: solid 0.1rem #00000020;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     user-select: none;
     border-radius: 1.5rem 1.5rem 0 0;
   }
@@ -340,5 +380,23 @@
     background-color: rgba(239, 68, 68, 0.1);
     border-color: #ef4444;
     color: #ef4444;
+  }
+
+  .date-change-button {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .date-change-button:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
+  }
+  .date-text {
+    margin: 0 1rem;
   }
 </style>
