@@ -27,10 +27,12 @@ class ScheduleService {
         console.log('Schedule added successfully:', apiResponse.message);
         // store에 직접 추가
         const scheduleStore = useScheduleStore();
-        scheduleStore.scheduleList.value.push({ 
+        const newSchedule = { 
           ...schedule, 
           scheduleId: apiResponse.data 
-        });
+        };
+        const updatedScheduleList = [...scheduleStore.scheduleList, newSchedule];
+        scheduleStore.setScheduleList(updatedScheduleList);
       } else {
         console.error('Failed to add schedule:', apiResponse.message);
       }
@@ -50,9 +52,10 @@ class ScheduleService {
         console.log('Schedule deleted successfully:', apiResponse.message);
         // 200 응답일 때만 store 상태 업데이트
         const scheduleStore = useScheduleStore();
-        scheduleStore.scheduleList.value = scheduleStore.scheduleList.value.filter(
+        const updatedScheduleList = scheduleStore.scheduleList.filter(
           (s) => s.scheduleId !== scheduleId
         );
+        scheduleStore.setScheduleList(updatedScheduleList);
       } else {
         console.error('Failed to delete schedule:', apiResponse.message);
       }
@@ -75,9 +78,10 @@ class ScheduleService {
         console.log('Schedule updated successfully:', apiResponse.message);
         // 200 응답일 때만 store 상태 업데이트
         const scheduleStore = useScheduleStore();
-        scheduleStore.scheduleList.value = scheduleStore.scheduleList.value.map((s) =>
+        const updatedScheduleList = scheduleStore.scheduleList.map((s) =>
           s.scheduleId === scheduleId ? newSchedule : s
         );
+        scheduleStore.setScheduleList(updatedScheduleList);
       } else {
         console.error('Failed to update schedule:', apiResponse.message);
       }
