@@ -3,9 +3,11 @@ import type { ApiResponse } from '@/domain/common/model/response.type';
 import { useAuthStore } from '@/stores/auth';
 
 type UserInfo = {
+  id: number;
   name: string;
   email: string;
   profileImage: string;
+  createdAt: string;
 };
 
 class UserService {

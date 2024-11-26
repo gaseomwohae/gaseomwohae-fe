@@ -37,6 +37,7 @@
 </template>
 
 <script setup lang="ts">
+  import PlaceReview from './PlaceReview.vue';
   import { usePlaceStore } from '@/stores/place.store';
   import { storeToRefs } from 'pinia';
   import PlaceSummary from './PlaceSummary.vue';

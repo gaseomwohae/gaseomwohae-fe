@@ -1,22 +1,22 @@
 <template>
-  <div class="place-review">
+  <div class="place-review-card">
     <div class="place-review__header">
       <div class="place-review__header__info">
         <div class="place-review__header__profile">
-          <img :src="review?.user?.profile" />
+          <img :src="review?.user?.profileImage" />
           <div class="place-review__header__name font-m font-bold">
             {{ review?.user?.name }}
           </div>
         </div>
         <div class="place-review__header__rate">
-          <ReviewBlock :reviewRate="review?.reviewRate" />
+          <ReviewBlock :reviewRate="review?.rating" />
         </div>
       </div>
       <div class="place-review__header__date font-caption">{{ review?.createdAt }}</div>
     </div>
     <div class="place-review__content">
-      <img :src="review?.photo" />
-      <div class="place-review__content__text font-s" v-html="review?.reviewText"></div>
+      <img :src="review?.image" />
+      <div class="place-review__content__text font-s" v-html="review?.content"></div>
     </div>
   </div>
 </template>
@@ -64,11 +64,13 @@
 
   .place-review__content {
     display: flex;
+
     flex-direction: column;
     gap: 1rem;
   }
 
-  .place-review {
+  .place-review-card {
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     gap: 1rem;

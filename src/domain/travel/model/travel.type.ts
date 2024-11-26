@@ -1,4 +1,6 @@
-import type { User } from '@/domain/auth/model/auth.type';
+
+import type { UserInfo } from '@/domain/user/service/user.service';
+
 
 export interface Schedule {
   scheduleId: number;
@@ -27,10 +29,11 @@ export interface Place {
 
 export interface Review {
   id: number;
-  photo: string;
-  reviewText: string;
-  reviewRate: number;
-  user: User;
+  placeId: number;
+  rating: number;
+  content: string;
+  image: string;
+  user: UserInfo;
   createdAt: string;
 }
 

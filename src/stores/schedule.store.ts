@@ -6,6 +6,7 @@ import { scheduleService } from '@/domain/travel/service/schedule.service';
 import { useTripInfoStore } from "./tripStore";
 
 export const useScheduleStore = defineStore('schedule', () => {
+  
   const scheduleList = ref<Schedule[]>([]);
   const draggingSchedule = ref<Schedule | null>(null);
   const draggingScheduleDuration = ref(0);

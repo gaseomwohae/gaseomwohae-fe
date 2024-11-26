@@ -21,7 +21,7 @@
   import { usePlaceStore } from '@/stores/place.store';
   import type { Place } from '../model/travel.type';
   import ReviewBlock from './ReviewBlock.vue';
-
+  import { reviewService } from '@/domain/review/service/review.service';
   const props = defineProps<{
     place: Place;
   }>();
@@ -31,7 +31,12 @@
   const placeStore = usePlaceStore();
 
   const selectPlace = () => {
-    placeStore.updatePlaceDetail(place);
+    console.log('call place.id', place.id);
+    reviewService.getReviewsByPlaceId(place.id).then((response) => {
+      if (response.code === 200) {
+        placeStore.updatePlaceDetail(place);
+      }
+    });
   };
 </script>
 
