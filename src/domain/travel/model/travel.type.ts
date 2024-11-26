@@ -9,14 +9,6 @@ export type WeatherInfo = {
   sky: number;     // 하늘 상태 (1: 맑음, 4: 흐림, 5: 비 등)
 };
 
-export interface Schedule {
-  scheduleId: number;
-  date: string;
-  startTime: string;
-  endTime: string;
-  place: Place;
-}
-
 export interface Place {
   id: number;
   name: string;
@@ -32,6 +24,19 @@ export interface Place {
   updatedAt: string;
   deletedAt: string | null;
   rating: number; // 상태 관리 시 사용할 rating 필드 추가
+}
+
+export interface ScheduleItem {
+  scheduleId: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  place: Place;
+}
+
+export interface DailySchedule {
+  date: string;
+  schedule: ScheduleItem[];
 }
 
 export interface Review {

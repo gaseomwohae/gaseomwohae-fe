@@ -7,7 +7,7 @@
           <TimeSlot :time="time" />
         </div>
         <div class="schedule-blocks">
-          <div v-for="schedule in scheduleList" :key="schedule.scheduleId">
+          <div v-for="schedule in filteredScheduleList.schedule" :key="schedule.scheduleId">
             <ScheduleBlock
               :schedule="schedule"
               @update-start-time="updateTime"
@@ -42,9 +42,8 @@
 
 <script setup lang="ts">
   import { useScheduleStore } from '@/stores/schedule.store';
-  import { useTravelStore } from '@/stores/travel.store';
   import { computed, onMounted, ref, watch } from 'vue';
-  import type { Schedule } from '../model/travel.type';
+  import type { DailySchedule, ScheduleItem } from '../model/travel.type';
   import { minutesToTime, remToPx, TIME_SLOTS, timeToMinutes } from '../utils/time.util';
   import ScheduleBlock from './ScheduleBlock.vue';
   import TimeSlot from './TimeSlot.vue';
@@ -55,10 +54,31 @@
 
   const scheduleDate = computed(() => tripInfoStore.tripInfo?.trip.startDate ?? '');
   const scheduleList = computed(() => scheduleStore.scheduleList);
+
   // scheduleList의 변화를 감지하여 콘솔에 출력
-  watch(scheduleList, (newScheduleList) => {
-    console.log('Updated schedule list:', newScheduleList);
+  watch(
+    scheduleList,
+    (newScheduleList) => {
+      console.log('Updated schedule list:', newScheduleList);
+    },
+    { deep: true },
+  );
+
+  // scheduleDate에 일치하는 scheduleList를 필터링
+  const filteredScheduleList = computed(() => {
+    const filteredScheduleList = scheduleStore.scheduleList.filter(
+      (dailySchedule) => dailySchedule.date === scheduleDate.value,
+    )[0];
+    console.log('filteredScheduleList', filteredScheduleList);
+
+    return filteredScheduleList;
   });
+
+  // scheduleList의 변화를 감지하여 콘솔에 출력
+  watch(filteredScheduleList, (newList) => {
+    console.log('Filtered Schedule List:', newList);
+  });
+
   // Constants
   const MINUTES_PER_SLOT = 30;
   const SLOT_HEIGHT = remToPx(8);
@@ -76,10 +96,12 @@
   });
 
   // 스케줄 시간 업데이트
-  const updateTime = (updatedSchedule: Schedule) => {
-    const targetSchedule = scheduleList.value.find(
-      (schedule) => schedule.scheduleId === updatedSchedule.scheduleId,
-    );
+  const updateTime = (updatedSchedule: ScheduleItem) => {
+    const targetSchedule: ScheduleItem | undefined = scheduleList.value
+      .flatMap((dailySchedule) => dailySchedule.schedule)
+      .find((schedule) => schedule.scheduleId === updatedSchedule.scheduleId);
+
+    console.log('targetSchedule', targetSchedule);
 
     if (
       !targetSchedule ||
@@ -100,7 +122,7 @@
     const newStart = timeToMinutes(startTime);
     const newEnd = timeToMinutes(endTime);
 
-    return scheduleList.value.some((s) => {
+    return filteredScheduleList.value.schedule.some((s) => {
       if (id === s.scheduleId) {
         return false;
       }
@@ -160,7 +182,7 @@
   };
 
   const moveSchedule = (id: number, newStartTime: string) => {
-    const schedule = scheduleList.value.find((s) => s.scheduleId === id);
+    const schedule = filteredScheduleList.value.schedule.find((s) => s.scheduleId === id);
     if (!schedule) {
       console.log('Schedule not found');
       return false;
@@ -206,7 +228,7 @@
       const startTime = dragOverTime.value;
       const endTimeMinutes = timeToMinutes(startTime) + MINUTES_PER_SLOT;
       const endTime = minutesToTime(endTimeMinutes);
-      const newSchedule: Schedule = {
+      const newSchedule: ScheduleItem = {
         scheduleId: 0,
         startTime,
         endTime,
@@ -221,11 +243,6 @@
       }
     }
   };
-
-  // scheduleList의 변화를 감지하여 콘솔에 출력
-  watch(scheduleList, (newScheduleList) => {
-    console.log('Updated schedule list:', newScheduleList);
-  });
 </script>
 
 <style scoped>

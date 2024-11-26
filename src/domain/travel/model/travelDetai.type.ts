@@ -1,7 +1,7 @@
 // src/domain/home/model/travelDetail.type.ts
 
 import type { Participant, ParticipantApiResponse } from '@/domain/common/model/Participant.type';
-import type { Schedule } from '@/domain/travel/model/travel.type';
+import type { DailySchedule } from '@/domain/travel/model/travel.type';
 import { mapApiResponseToParticipant } from '@/domain/common/model/Participant.type';
 import type { TripSimple } from "@/domain/common/model/TripSimple.type";
 import type { Place, WeatherInfo } from '@/domain/travel/model/travel.type';
@@ -10,7 +10,7 @@ import type { Supplies } from '@/domain/supply/components/model/supply.type';
 export type TravelDetail = {
   travel: TripSimple;
   participants: Participant[];
-  schedules: Schedule[];
+  schedules: DailySchedule[];
   accommodations: Place[];
   supplies: Supplies;
   weatherInfos: WeatherInfo[];
@@ -20,7 +20,7 @@ export type TravelDetail = {
 export function mapApiResponseToTravelDetail(apiResponse: {
   travel: TripSimple;
   participants: ParticipantApiResponse[];
-  schedules: Schedule[];
+  schedules: DailySchedule[];
   accommodations: Place[];
   supplies: Supplies;
   weatherInfos: WeatherInfo[];

@@ -2,20 +2,19 @@ import axiosInstance from '@/domain/common/util/axios';
 import type { ApiResponse } from '@/domain/common/model/response.type';
 import { mapApiResponseToTravelDetail } from '@/domain/travel/model/travelDetai.type';
 import type { ParticipantApiResponse } from '@/domain/common/model/Participant.type';
-import type { Schedule } from '@/domain/travel/model/travel.type';
+import type { DailySchedule, WeatherInfo } from '@/domain/travel/model/travel.type';
 import type { TripSimple } from '@/domain/common/model/TripSimple.type';
 import { useTripInfoStore } from '@/stores/tripStore';
 import type { Place } from '@/domain/travel/model/travel.type';
 import { useScheduleStore } from '@/stores/schedule.store';
 import type { Supplies } from '@/domain/supply/components/model/supply.type';
-import type { WeatherInfo } from '@/domain/travel/model/travel.type';
 
 class TravelService {
   async getTravelDetail(travelId: number): Promise<void> {
     const tripInfoStore = useTripInfoStore();
 
     try {
-      const response = await axiosInstance.get<ApiResponse<{ travel: TripSimple; participants: ParticipantApiResponse[]; schedules: Schedule[]; accommodations: Place[]; supplies: Supplies; weatherInfo: WeatherInfo[] }>>(`/api/travel/${travelId}`);
+      const response = await axiosInstance.get<ApiResponse<{ travel: TripSimple; participants: ParticipantApiResponse[]; schedules: DailySchedule[]; accommodations: Place[]; supplies: Supplies; weatherInfo: WeatherInfo[] }>>(`/api/travel/${travelId}`);
       const apiResponse = response.data;
 
       if (apiResponse.code === 200 && apiResponse.success) {

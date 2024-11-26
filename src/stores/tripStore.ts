@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import type { TripSimpleList } from '@/domain/common/model/TripSimple.type';
 import type { Position, TripInfo } from '@/domain/home/model/tripInfo.type';
 import type { Participant } from '@/domain/common/model/Participant.type';
-import type { Schedule } from '@/domain/travel/model/travel.type';
+import type { DailySchedule } from '@/domain/travel/model/travel.type';
 import type { SupplyItem } from '@/domain/supply/components/model/supply.type';
 export const useTripStore = defineStore('tripStore', {
   state: () => ({
@@ -59,7 +59,7 @@ export const useTripInfoStore = defineStore('tripInfo', {
     },
 
     // schedules만 업데이트하는 메서드 추가
-    updateSchedule(newSchedules: Schedule[]) {
+    updateSchedule(newSchedules: DailySchedule[]) {
       if (this.tripInfo) {
         this.tripInfo.schedules = [...newSchedules];
       }

@@ -17,7 +17,7 @@
 <script setup lang="ts">
   import { useScheduleStore } from '@/stores/schedule.store';
   import { computed, ref, watch } from 'vue';
-  import type { Schedule } from '../model/travel.type';
+  import type { ScheduleItem } from '../model/travel.type';
   import { minutesToTime, remToPx, timeToMinutes } from '../utils/time.util';
   import PlaceSummary from './PlaceSummary.vue';
 
@@ -27,7 +27,7 @@
   const MAX_DURATION = 24 * 60; // 최대 24시간
 
   const props = defineProps<{
-    schedule: Schedule;
+    schedule: ScheduleItem;
   }>();
 
   const emit = defineEmits(['update-start-time', 'update-end-time']);
