@@ -25,10 +25,10 @@
         ></textarea>
         <p v-if="error" class="error-message">{{ error }}</p>
       </div>
-      <div class="form-group">
+      <!-- <div class="form-group">
         <label for="image">이미지 URL</label>
         <input type="text" id="image" v-model="reviewData.image" class="styled-input" required />
-      </div>
+      </div> -->
     </template>
 
     <template #footer>

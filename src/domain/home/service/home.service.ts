@@ -68,7 +68,7 @@ class HomeService {
         const updatedTripInfo = {
           ...currentTripInfo,
           trip: {
-            ...currentTripInfo.trip,
+            ...currentTripInfo?.trip,
             name: tripRequest.name,
             destination: tripRequest.destination,
             startDate: tripRequest.startDate,
@@ -77,7 +77,7 @@ class HomeService {
           }
         };
 
-        tripInfoStore.setTripInfo(updatedTripInfo);
+        tripInfoStore.setTripInfo(updatedTripInfo );
 
         // tripSimpleList에서 해당 tripId를 가진 항목을 갱신
         const updatedTripSimpleList = tripStore.tripSimpleList.map(trip =>

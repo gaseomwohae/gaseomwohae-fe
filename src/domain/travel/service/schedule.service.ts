@@ -1,8 +1,8 @@
 import axiosInstance from '@/domain/common/util/axios';
 import type { ApiResponse } from '@/domain/common/model/response.type';
 import { useScheduleStore } from '@/stores/schedule.store';
-import type { ScheduleItem } from '@/domain/travel/model/travel.type';
-
+import type { ScheduleItem, DailySchedule } from '@/domain/travel/model/travel.type';
+import { useTripInfoStore } from '@/stores/tripStore';
 class ScheduleService {
   // 일정 추가하기
   async addSchedule(
@@ -86,6 +86,29 @@ class ScheduleService {
       }
     } catch (error) {
       console.error('Error occurred while updating schedule:', error);
+      throw error;
+    }
+  }
+
+  // 여행의 모든 일정 조회
+  async getScheduleList(travelId: number): Promise<void> {
+    try {
+      const response = await axiosInstance.get<ApiResponse<DailySchedule[]>>(
+        `/api/schedule?travel-id=${travelId}`
+      );
+      const apiResponse = response.data;
+
+      if (apiResponse.code === 200 && apiResponse.success) {
+        console.log('Schedule list fetched successfully:', apiResponse.message);
+        const scheduleStore = useScheduleStore();
+        scheduleStore.setScheduleList(apiResponse.data || []);
+        const tripInfoStore = useTripInfoStore();
+        tripInfoStore.setScheduleList(apiResponse.data || []);
+      } else {
+        console.error('Failed to fetch schedule list:', apiResponse.message);
+      }
+    } catch (error) {
+      console.error('Error occurred while fetching schedule list:', error);
       throw error;
     }
   }

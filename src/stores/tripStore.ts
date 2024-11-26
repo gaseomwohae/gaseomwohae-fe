@@ -33,6 +33,12 @@ export const useTripInfoStore = defineStore('tripInfo', {
         this.tripInfo.position = position;
       }
     },
+
+    setScheduleList(scheduleList: DailySchedule[]) {
+      if (this.tripInfo) {
+        this.tripInfo.schedules = scheduleList;
+      }
+    },
     // tripInfo 설정 메서드 추가
     setTripInfo(tripInfo: TripInfo) {
       this.tripInfo = tripInfo;

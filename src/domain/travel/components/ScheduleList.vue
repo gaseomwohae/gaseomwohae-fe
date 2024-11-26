@@ -23,7 +23,7 @@
           <TimeSlot :time="time" />
         </div>
         <div class="schedule-blocks">
-          <div v-for="schedule in filteredScheduleList.schedule" :key="schedule.scheduleId">
+          <div v-for="schedule in filteredScheduleList?.schedule" :key="schedule.scheduleId">
             <ScheduleBlock
               :schedule="schedule"
               @update-start-time="updateTime"
@@ -79,14 +79,15 @@
   const changeDate = (direction: 'prev' | 'next') => {
     console.log('changeDate', direction);
     const currentDate = new Date(scheduleDate.value);
+    console.log('currentDate', currentDate);
     if (direction === 'prev') {
-      currentDate.setDate(currentDate.getDate() - 1);
+      currentDate.setDate(currentDate.getDate() - 1);scheduleDate.value = formatedDate(currentDate);
       scheduleDate.value = currentDate.toISOString().split('T')[0];
     } else if (direction === 'next') {
-      currentDate.setDate(currentDate.getDate() + 1);
+      currentDate.setDate(currentDate.getDate() + 1);scheduleDate.value = formatedDate(currentDate);
       scheduleDate.value = currentDate.toISOString().split('T')[0];
     }
-
+    console.log('scheduleDate', scheduleDate.value);
     // 변경된 날짜가 여행 날짜 범위 내에 있는지 확인
     // if (currentDate >= startDate.value && currentDate <= endDate.value) {
     //   scheduleDate.value = currentDate.toISOString().split('T')[0];
@@ -102,11 +103,19 @@
     { deep: true },
   );
 
+  const formatedDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
   // scheduleDate에 일치하는 scheduleList를 필터링
   const filteredScheduleList = computed(() => {
-    const filteredScheduleList = scheduleStore.scheduleList.filter(
+    console.log('filtered scheduleDate', scheduleDate.value);
+    const filteredScheduleList = scheduleStore.scheduleList.find(
       (dailySchedule) => dailySchedule.date === scheduleDate.value,
-    )[0];
+    );
     console.log('filteredScheduleList', filteredScheduleList);
 
     return filteredScheduleList;
@@ -220,7 +229,7 @@
   };
 
   const moveSchedule = (id: number, newStartTime: string) => {
-    const schedule = filteredScheduleList.value.schedule.find((s) => s.scheduleId === id);
+    const schedule = filteredScheduleList.value?.schedule.find((s) => s.scheduleId === id);
     if (!schedule) {
       console.log('Schedule not found');
       return false;
@@ -281,6 +290,15 @@
       }
     }
   };
+
+  const formatDate = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+
 </script>
 
 <style scoped>
