@@ -166,6 +166,8 @@
       return false;
     }
 
+    console.log('draggingSchedule', schedule.scheduleId);
+
     const startMinutes = timeToMinutes(newStartTime);
     const duration = timeToMinutes(schedule.endTime) - timeToMinutes(schedule.startTime);
     const newEndTime = minutesToTime(startMinutes + duration);
@@ -174,6 +176,8 @@
       console.log('Overlap detected');
       return false;
     }
+
+    console.log('moveSchedule', schedule.scheduleId);
 
     schedule.startTime = newStartTime;
     schedule.endTime = newEndTime;
