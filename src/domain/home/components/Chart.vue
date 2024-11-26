@@ -9,6 +9,7 @@
   import { ref, onMounted, watch } from 'vue';
   import { Chart } from 'chart.js/auto';
   import type { LocalVisitor } from '../model/localVisitor.type';
+  import { mockBusanVisitors } from '../mock/localVisitor.mock';
 
   const myChart = ref<HTMLCanvasElement | null>(null);
   let chartInstance: Chart | null = null;
@@ -16,6 +17,18 @@
   const props = defineProps<{
     localVisitors: LocalVisitor[];
   }>();
+  const localVisitors = ref<LocalVisitor[]>(props.localVisitors);
+  watch(
+    () => localVisitors,
+    (newVisitors) => {
+      updateChartData(newVisitors.value);
+    },
+  );
+  
+  onMounted(() => {
+    localVisitors.value = mockBusanVisitors;
+    updateChartData(localVisitors.value);
+  });
 
   const emptyChartData = {
     labels: [],
@@ -39,6 +52,7 @@
 
     const chartData =
       visitors.length > 0
+
         ? {
             labels: visitors.map((visitor) => visitor.name),
             datasets: [
@@ -87,17 +101,17 @@
     });
   };
 
-  watch(
-    () => props.localVisitors,
-    (newVisitors) => {
-      updateChartData(newVisitors);
-    },
-    { deep: true },
-  );
+  // watch(
+  //   () => props.localVisitors,
+  //   (newVisitors) => {
+  //     updateChartData(newVisitors);
+  //   },
+  //   { deep: true },
+  // );
 
-  onMounted(() => {
-    updateChartData(props.localVisitors);
-  });
+  // onMounted(() => {
+  //   updateChartData(props.localVisitors);
+  // });
 </script>
 
 <style scoped>
